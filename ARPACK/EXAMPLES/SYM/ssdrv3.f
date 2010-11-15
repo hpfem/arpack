@@ -44,7 +44,7 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: sdrv3.F   SID: 2.4   DATE OF SID: 4/22/96   RELEASE: 2
+c FILE: sdrv3.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -69,7 +69,7 @@ c     %--------------%
 c     | Local Arrays |
 c     %--------------%
 c
-      Real
+      Real 
      &                 v(ldv,maxncv), workl(maxncv*(maxncv+8)),
      &                 workd(3*maxn), d(maxncv,2), resid(maxn), 
      &                 ad(maxn), adl(maxn), adu(maxn), adu2(maxn),
@@ -85,23 +85,23 @@ c
       integer          ido, n, nev, ncv, lworkl, info, j, ierr,
      &                 nconv, maxitr, ishfts, mode
       logical          rvec
-      Real
+      Real 
      &                 sigma, r1, r2, tol, h
 c
 c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Real 
+      Real  
      &                 zero, one, four, six
-      parameter        ( zero = 0.0E+0, one = 1.0E+0, 
-     &                   four = 4.0E+0, six = 6.0E+0 )
+      parameter        ( zero = 0.0E+0 , one = 1.0E+0 , 
+     &                   four = 4.0E+0 , six = 6.0E+0  )
 c
 c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Real
+      Real 
      &                 snrm2
       external         saxpy, scopy, sscal, snrm2, sgttrf, sgttrs
 c
@@ -186,7 +186,7 @@ c     | arising from using piecewise linear finite     |
 c     | elements on the interval [0, 1].               |
 c     %------------------------------------------------%
 c
-      h = one / real(n+1)
+      h = one / real (n+1)
 c
       r1 = (four / six) * h 
       r2 = (one / six) * h
@@ -377,8 +377,8 @@ c
             print *, ' '
          else if ( info .eq. 3) then
             print *, ' ' 
-            print *, ' No shifts could be applied during implicit
-     &                 Arnoldi update, try increasing NCV.'
+            print *, ' No shifts could be applied during implicit',
+     &               ' Arnoldi update, try increasing NCV.'
             print *, ' '
          end if      
 c
@@ -416,10 +416,10 @@ c     on the interval [0,1].
 c
       subroutine mv (n, v, w)
       integer           n, j
-      Real
+      Real 
      &                  v(n),w(n), one, four, six, h
-      parameter         (one = 1.0E+0, four = 4.0E+0, 
-     &                   six = 6.0E+0)
+      parameter         (one = 1.0E+0 , four = 4.0E+0 , 
+     &                   six = 6.0E+0 )
 c
       w(1) = four*v(1) + v(2)
       do 100 j = 2,n-1
@@ -430,7 +430,7 @@ c
 c
 c     Scale the vector w by h.
 c
-      h = one / (real(n+1)*six)
+      h = one / (real (n+1)*six)
       call sscal(n, h, w, 1)
       return
       end
@@ -445,9 +445,9 @@ c     piecewise linear elements.
 c
       subroutine av (n, v, w)
       integer           n, j
-      Real
+      Real 
      &                  v(n),w(n), two, one, h
-      parameter         ( one = 1.0E+0, two = 2.0E+0 )
+      parameter         ( one = 1.0E+0 , two = 2.0E+0  )
 c
       w(1) =  two*v(1) - v(2)
       do 100 j = 2,n-1
@@ -458,7 +458,7 @@ c
 c
 c     Scale the vector w by (1 / h).
 c
-      h = one / real(n+1)
+      h = one / real (n+1)
       call sscal(n, one/h, w, 1)
       return
       end

@@ -1,4 +1,4 @@
-      program znbdr3
+      program znbdr3 
 c
 c     ... Construct matrices A and M in LAPACK-style band form.
 c         Matrices A and M are derived from the finite 
@@ -8,22 +8,22 @@ c                         (d^2u/dx^2) + rho*(du/dx)
 c         on the interval [0,1] with zero boundary condition using
 c         piecewise linear elements.
 c
-c     ... Call ZNBAND to find eigenvalues LAMBDA such that
+c     ... Call ZNBAND  to find eigenvalues LAMBDA such that
 c                    A*x = M*x*LAMBDA.
 c
 c     ... Eigenvalues with largest real parts are sought.
 c
-c     ... Use mode 2 of ZNAUPD.
+c     ... Use mode 2 of ZNAUPD .
 c
 c\BeginLib
 c
 c\Routines called:
-c     znband  ARPACK banded eigenproblem solver.
-c     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
-c     zlaset  LAPACK routine to initialize a matrix to zero.
-c     zaxpy   Level 1 BLAS that computes y <- alpha*x+y.
-c     dznrm2  Level 1 BLAS that computes the norm of a vector.
-c     zgbmv   Level 2 BLAS that computes the band matrix vector product.
+c     znband   ARPACK banded eigenproblem solver.
+c     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully.
+c     zlaset   LAPACK routine to initialize a matrix to zero.
+c     zaxpy    Level 1 BLAS that computes y <- alpha*x+y.
+c     dznrm2   Level 1 BLAS that computes the norm of a vector.
+c     zgbmv    Level 2 BLAS that computes the band matrix vector product.
 c
 c\Author
 c     Richard Lehoucq
@@ -34,8 +34,8 @@ c     Applied Mathematics
 c     Rice University
 c     Houston, Texas
 c
-c\SCCS Information: %Z%
-c FILE: %M%   SID: %I%   DATE OF SID: %G%   RELEASE: %R%
+c\SCCS Information: @(#)
+c FILE: nbdr3.F   SID: 2.4   DATE OF SID: 10/20/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -66,12 +66,12 @@ c     %--------------%
 c
       integer          iparam(11), iwork(maxn)
       logical          select(maxncv)
-      Complex*16 
+      Complex*16  
      &                 a(lda,maxn), m(lda,maxn), fac(lda,maxn),
      &                 workl(3*maxncv*maxncv+5*maxncv), workd(3*maxn), 
      &                 workev(2*maxncv), v(ldv, maxncv),
      &                 resid(maxn), d(maxncv), ax(maxn), mx(maxn)
-      Double precision 
+      Double precision  
      &                 rwork(maxn), rd(maxncv,3)
 c
 c     %---------------%
@@ -83,27 +83,28 @@ c
      &                 n, idiag, isup, isub, maxitr,
      &                 mode, nconv
       logical          rvec
-      Double precision 
+      Double precision  
      &                 tol
-      Complex*16
+      Complex*16 
      &                 rho, h, sigma
 c 
 c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Complex*16 
+      Complex*16  
      &                 one, zero, two
-      parameter        (one = (1.0D+0, 0.0D+0), zero = (0.0D+0, 0.0D+0),
-     &                  two = (2.0D+0, 0.0D+0))
+      parameter        (one  = (1.0D+0, 0.0D+0) ,
+     &                  zero = (0.0D+0, 0.0D+0) ,
+     &                  two  = (2.0D+0, 0.0D+0) )
 c
 c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Double precision
-     &                  dznrm2, dlapy2
-      external          dznrm2, zgbmv, zaxpy, dlapy2 
+      Double precision 
+     &                  dznrm2 , dlapy2 
+      external          dznrm2 , zgbmv , zaxpy , dlapy2 , zlaset  
 c
 c     %-----------------------%
 c     | Executable Statements |
@@ -145,7 +146,7 @@ c
       sigma = zero
 c
 c     %----------------------------------------------------%
-c     | The work array WORKL is used in ZNAUPD as          | 
+c     | The work array WORKL is used in ZNAUPD  as          | 
 c     | workspace.  Its dimension LWORKL has to be set as  |
 c     | illustrated below.  The parameter TOL determines   |
 c     | the stopping criterion. If TOL<=0, machine machine |
@@ -160,10 +161,10 @@ c
 c
 c     %---------------------------------------------------%
 c     | IPARAm(3) specifies the maximum number of Arnoldi |
-c     | iterations allowed.  Mode 2 of ZNAUPD is used     |
+c     | iterations allowed.  Mode 2 of ZNAUPD  is used     |
 c     | (IPARAm(7) = 2). All these options can be changed |
 c     | by the user. For details, see the documentation   |
-c     | in znband.                                        |
+c     | in znband .                                        |
 c     %---------------------------------------------------%
 c
       maxitr = 300
@@ -177,6 +178,14 @@ c     | Construct matrices A and M in LAPACK-style |
 c     | banded form.                               |
 c     %--------------------------------------------%
 c
+c     %---------------------------------------------%
+c     | Zero out the workspace for banded matrices. |
+c     %---------------------------------------------%
+c
+      call zlaset ('A', lda, n, zero, zero, a, lda)
+      call zlaset ('A', lda, n, zero, zero, m, lda)
+      call zlaset ('A', lda, n, zero, zero, fac, lda)
+c
 c     %-------------------------------------%
 c     | KU, KL are number of superdiagonals |
 c     | and subdiagonals within the band of |
@@ -185,20 +194,17 @@ c     %-------------------------------------%
 c
       kl   = 1
       ku   = 1
-      call zlaset('A', 2*kl+ku+1, n, zero, zero, a, lda)
-      call zlaset('A', 2*kl+ku+1, n, zero, zero, m, lda)
-      call zlaset('A', 2*kl+ku+1, n, zero, zero, fac, lda)
 c
 c     %---------------% 
 c     | Main diagonal |
 c     %---------------%
 c
-      h = one / dcmplx(n+1)
+      h = one / dcmplx (n+1)
 c
       idiag = kl+ku+1
       do 30 j = 1, n
-         a(idiag,j) = (2.0D+0, 0.0D+0) / h 
-         m(idiag,j) = (4.0D+0, 0.0D+0) * h 
+         a(idiag,j) = (2.0D+0, 0.0D+0)  / h 
+         m(idiag,j) = (4.0D+0, 0.0D+0)  * h 
   30  continue 
 c 
 c     %-------------------------------------%
@@ -207,7 +213,7 @@ c     %-------------------------------------%
 c 
       isup = kl+ku
       isub = kl+ku+2
-      rho = (1.0D+1, 0.0D+0)
+      rho = (1.0D+1, 0.0D+0) 
       do 40 j = 1, n-1
            a(isup,j+1) = -one/h + rho/two
            a(isub,j) = -one/h - rho/two
@@ -224,7 +230,7 @@ c     | columns of V.                                 |
 c     %-----------------------------------------------%
 c
       rvec = .true. 
-      call znband(rvec, 'A', select, d, v, ldv, sigma,
+      call znband (rvec, 'A', select, d, v, ldv, sigma,
      &           workev, n, a, m, lda, fac, kl, ku, which,
      &           bmat, nev, tol, resid, ncv, v, ldv, iparam,
      &           workd, workl, lworkl, rwork, iwork, info)
@@ -261,27 +267,27 @@ c           | Compute the residual norm. |
 c           |    ||  A*x - lambda*x ||   |
 c           %----------------------------%
 c
-            call zgbmv('Notranspose', n, n, kl, ku, one,
+            call zgbmv ('Notranspose', n, n, kl, ku, one,
      &                 a(kl+1,1), lda, v(1,j), 1, zero,
      &                 ax, 1)
-            call zgbmv('Notranspose', n, n, kl, ku, one,
+            call zgbmv ('Notranspose', n, n, kl, ku, one,
      &                 m(kl+1,1), lda, v(1,j), 1, zero,
      &                 mx, 1)
-            call zaxpy(n, -d(j), mx, 1, ax, 1)
-            rd(j,1) = dble(d(j))
-            rd(j,2) = dimag(d(j))
-            rd(j,3) = dznrm2(n, ax, 1)
-            rd(j,3) = rd(j,3) / dlapy2(rd(j,1), rd(j,2))         
+            call zaxpy (n, -d(j), mx, 1, ax, 1)
+            rd(j,1) = dble (d(j))
+            rd(j,2) = dimag (d(j))
+            rd(j,3) = dznrm2 (n, ax, 1)
+            rd(j,3) = rd(j,3) / dlapy2 (rd(j,1), rd(j,2))         
  50      continue 
 
-         call dmout(6, nconv, 3, rd, maxncv, -6,
+         call dmout (6, nconv, 3, rd, maxncv, -6,
      &             'Ritz values (Real,Imag) and relative residuals')
       else 
 c
 c        %-------------------------------------%
 c        | Either convergence failed, or there |
 c        | is error.  Check the documentation  |
-c        | for znband.                         | 
+c        | for znband .                         | 
 c        %-------------------------------------%
 c
           print *, ' '

@@ -9,7 +9,7 @@ c  of a linear operator "OP" with respect to a semi-inner product defined by
 c  a symmetric positive semi-definite real matrix B. B may be the identity 
 c  matrix. NOTE: If the linear operator "OP" is real and symmetric 
 c  with respect to the real positive semi-definite symmetric matrix B, 
-c  i.e. B*OP = (OP')*B, then subroutine ssaupd should be used instead.
+c  i.e. B*OP = (OP`)*B, then subroutine dsaupd should be used instead.
 c
 c  The computed approximate eigenvalues are called Ritz values and
 c  the corresponding approximate eigenvectors are called Ritz vectors.
@@ -110,7 +110,7 @@ c          'SR' -> want the NEV eigenvalues of smallest real part.
 c          'LI' -> want the NEV eigenvalues of largest imaginary part.
 c          'SI' -> want the NEV eigenvalues of smallest imaginary part.
 c
-c  NEV     Integer.  (INPUT)
+c  NEV     Integer.  (INPUT/OUTPUT)
 c          Number of eigenvalues of OP to be computed. 0 < NEV < N-1.
 c
 c  TOL     Double precision scalar.  (INPUT)
@@ -289,13 +289,13 @@ c  2. If a basis for the invariant subspace corresponding to the converged Ritz
 c     values is needed, the user must call dneupd immediately following 
 c     completion of dnaupd. This is new starting with release 2 of ARPACK.
 c
-c  3. If M can be factored into a Cholesky factorization M = LL'
+c  3. If M can be factored into a Cholesky factorization M = LL`
 c     then Mode = 2 should not be selected.  Instead one should use
-c     Mode = 1 with  OP = inv(L)*A*inv(L').  Appropriate triangular 
-c     linear systems should be solved with L and L' rather
+c     Mode = 1 with  OP = inv(L)*A*inv(L`).  Appropriate triangular 
+c     linear systems should be solved with L and L` rather
 c     than computing inverses.  After convergence, an approximate
 c     eigenvector z of the original problem is recovered by solving
-c     L'z = x  where x is a Ritz vector of OP.
+c     L`z = x  where x is a Ritz vector of OP.
 c
 c  4. At present there is no a-priori analysis to guide the selection
 c     of NCV relative to NEV.  The only formal requrement is that NCV > NEV + 2.
@@ -395,7 +395,7 @@ c\Revision history:
 c     12/16/93: Version '1.1'
 c
 c\SCCS Information: @(#) 
-c FILE: naupd.F   SID: 2.5   DATE OF SID: 8/27/96   RELEASE: 2
+c FILE: naupd.F   SID: 2.10   DATE OF SID: 08/23/02   RELEASE: 2
 c
 c\Remarks
 c
@@ -485,9 +485,10 @@ c        %----------------%
 c
          ierr   = 0
          ishift = iparam(1)
-         levec  = iparam(2)
+c         levec  = iparam(2)
          mxiter = iparam(3)
-         nb     = iparam(4)
+c         nb     = iparam(4)
+         nb     = 1
 c
 c        %--------------------------------------------%
 c        | Revision 2 performs only implicit restart. |
@@ -497,13 +498,13 @@ c
          mode   = iparam(7)
 c
          if (n .le. 0) then
-             ierr = -1
+            ierr = -1
          else if (nev .le. 0) then
-             ierr = -2
+            ierr = -2
          else if (ncv .le. nev+1 .or.  ncv .gt. n) then
-             ierr = -3
-         else if (mxiter .le. 0) then
-             ierr = -4
+            ierr = -3
+         else if (mxiter .le.          0) then
+            ierr = 4
          else if (which .ne. 'LM' .and.
      &       which .ne. 'SM' .and.
      &       which .ne. 'LR' .and.
@@ -515,12 +516,12 @@ c
             ierr = -6
          else if (lworkl .lt. 3*ncv**2 + 6*ncv) then
             ierr = -7
-         else if (mode .lt. 1 .or. mode .gt. 5) then
-                                                ierr = -10
+         else if (mode .lt. 1 .or. mode .gt. 4) then
+            ierr = -10
          else if (mode .eq. 1 .and. bmat .eq. 'G') then
-                                                ierr = -11
+            ierr = -11
          else if (ishift .lt. 0 .or. ishift .gt. 1) then
-                                                ierr = -12
+            ierr = -12
          end if
 c 
 c        %------------%

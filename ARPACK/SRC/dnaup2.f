@@ -162,7 +162,7 @@ c     Rice University
 c     Houston, Texas    
 c 
 c\SCCS Information: @(#) 
-c FILE: naup2.F   SID: 2.4   DATE OF SID: 7/30/96   RELEASE: 2
+c FILE: naup2.F   SID: 2.8   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -216,25 +216,27 @@ c     | Local Scalars |
 c     %---------------%
 c
       character  wprime*2
-      logical    cnorm, getv0, initv, update, ushift
-      integer    ierr, iter, j, kplusp, msglvl, nconv, nevbef, nev0, 
-     &           np0, nptemp, numcnv
+      logical    cnorm , getv0, initv, update, ushift
+      integer    ierr  , iter , j    , kplusp, msglvl, nconv, 
+     &           nevbef, nev0 , np0  , nptemp, numcnv
       Double precision
-     &           rnorm, temp, eps23
+     &           rnorm , temp , eps23
+      save       cnorm , getv0, initv, update, ushift,
+     &           rnorm , iter , eps23, kplusp, msglvl, nconv , 
+     &           nevbef, nev0 , np0  , numcnv
 c
 c     %-----------------------%
 c     | Local array arguments |
 c     %-----------------------%
 c
       integer    kp(4)
-      save
 c
 c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
 c
-      external   dcopy, dgetv0, dnaitr, dnconv, dneigh, dngets, dnapps,
-     &           dvout, ivout, second
+      external   dcopy , dgetv0, dnaitr, dnconv, dneigh, 
+     &           dngets, dnapps, dvout , ivout , second
 c
 c     %--------------------%
 c     | External Functions |
@@ -413,8 +415,9 @@ c
    20    continue
          update = .true.
 c
-         call dnaitr (ido, bmat, n, nev, np, mode, resid, rnorm, v, ldv,
-     &                h, ldh, ipntr, workd, info)
+         call dnaitr (ido  , bmat, n  , nev, np , mode , resid, 
+     &                rnorm, v   , ldv, h  , ldh, ipntr, workd,
+     &                info)
 c 
 c        %---------------------------------------------------%
 c        | ido .ne. 99 implies use of reverse communication  |
@@ -587,7 +590,7 @@ c           | Scale the Ritz estimate of each Ritz value       |
 c           | by 1 / max(eps23,magnitude of the Ritz value).   |
 c           %--------------------------------------------------%
 c
-            do 35 j = 1, nev0
+            do 35 j = 1, numcnv
                 temp = max(eps23,dlapy2(ritzr(j),
      &                                   ritzi(j)))
                 bounds(j) = bounds(j)/temp
@@ -601,14 +604,14 @@ c           | (in the case when NCONV < NEV.)                    |
 c           %----------------------------------------------------%
 c
             wprime = 'LR'
-            call dsortc(wprime, .true., nev0, bounds, ritzr, ritzi)
+            call dsortc(wprime, .true., numcnv, bounds, ritzr, ritzi)
 c
 c           %----------------------------------------------%
 c           | Scale the Ritz estimate back to its original |
 c           | value.                                       |
 c           %----------------------------------------------%
 c
-            do 40 j = 1, nev0
+            do 40 j = 1, numcnv
                 temp = max(eps23, dlapy2(ritzr(j),
      &                                   ritzi(j)))
                 bounds(j) = bounds(j)*temp

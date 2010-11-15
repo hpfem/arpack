@@ -45,7 +45,7 @@ c     Rice University
 c     Houston, Texas    
 c
 c\SCCS Information: @(#) 
-c FILE: ndrv4.F   SID: 2.2   DATE OF SID: 4/22/96   RELEASE: 2
+c FILE: ndrv4.F   SID: 2.4   DATE OF SID: 10/18/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -72,14 +72,14 @@ c     %--------------%
 c
       integer           iparam(11), ipntr(14), ipiv(maxn)
       logical           select(maxncv)
-      Complex 
+      Complex  
      &                  ax(maxn), mx(maxn), d(maxncv), 
      &                  v(ldv,maxncv), workd(3*maxn), resid(maxn),
      &                  workev(2*maxncv),
      &                  workl(3*maxncv*maxncv+5*maxncv),
      &                  dd(maxn), dl(maxn), du(maxn),
      &                  du2(maxn)
-      Real
+      Real 
      &                  rwork(maxn), rd(maxncv,3)
 c
 c     %---------------%
@@ -89,12 +89,12 @@ c
       character         bmat*1, which*2
       integer           ido, n, nev, ncv, lworkl, info, j, ierr,
      &                  nconv, maxitr, ishfts, mode
-      Complex 
+      Complex  
      &                  rho, h, s,
      &                  sigma, s1, s2, s3
       common            /convct/ rho
 c
-      Real
+      Real 
      &                  tol
       logical           rvec 
 c 
@@ -102,19 +102,22 @@ c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Real
+      Real 
      &                  scnrm2, slapy2
-      external          scnrm2, caxpy, ccopy, cgttrf, cgttrs, slapy2
+      external          scnrm2, caxpy, ccopy, cgttrf, cgttrs,
+     &                  slapy2
 c
 c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Complex 
-     &                   one, zero, two
-      parameter         (one = (1.0E+0, 0.0E+0),
-     &                   zero = (0.0E+0, 0.0E+0), 
-     &                   two = (2.0E+0, 0.0E+0))
+      Complex  
+     &                   one, zero, two, four, six
+      parameter         (one = (1.0E+0, 0.0E+0) ,
+     &                   zero = (0.0E+0, 0.0E+0) , 
+     &                   two = (2.0E+0, 0.0E+0) ,
+     &                   four = (4.0E+0, 0.0E+0) ,
+     &                   six = (6.0E+0, 0.0E+0) )
 c
 c     %-----------------------%
 c     | Executable statements |
@@ -158,20 +161,20 @@ c     | Factor C in COMPLEX arithmetic (using LAPACK     |
 c     | subroutine cgttrf). The matrix A is chosen to be |
 c     | the tridiagonal matrix derived from the standard |
 c     | central difference discretization of the 1-d     |
-c     | convection-diffusion operator u" + rho*u' on the |
+c     | convection-diffusion operator u``+ rho*u` on the |
 c     | interval [0, 1] with zero Dirichlet boundary     |
 c     | condition.  The matrix M is chosen to be the     |
 c     | symmetric tridiagonal matrix with 4.0 on the     | 
 c     | diagonal and 1.0 on the off-diagonals.           | 
 c     %--------------------------------------------------%
 c
-      rho = (1.0E+1, 0.0E+0)
+      rho = (1.0E+1, 0.0E+0) 
       h = one / cmplx(n+1)
       s = rho / two
 c
-      s1 = -one/h - s - sigma*h
-      s2 = two/h  - (4.0E+0, 0.0E+0)*sigma*h
-      s3 = -one/h + s - sigma*h
+      s1 = -one/h - s - sigma*h/six
+      s2 = two/h  - four*sigma*h/six
+      s3 = -one/h + s - sigma*h/six
 c
       do 10 j = 1, n-1
 	 dl(j) = s1 
@@ -383,7 +386,7 @@ c
                 call av(n, v(1,j), ax)
                 call mv(n, v(1,j), mx)
                 call caxpy(n, -d(j), mx, 1, ax, 1)
-                rd(j,1) = real(d(j))
+                rd(j,1) = real (d(j))
                 rd(j,2) = aimag(d(j))
                 rd(j,3) = scnrm2(n, ax, 1)
                 rd(j,3) = rd(j,3) / slapy2(rd(j,1),rd(j,2))
@@ -408,8 +411,8 @@ c
              print *, ' '
          else if ( info .eq. 3) then
              print *, ' '
-             print *, ' No shifts could be applied during implicit
-     &                  Arnoldi update, try increasing NCV.'
+             print *, ' No shifts could be applied during implicit',
+     &                ' Arnoldi update, try increasing NCV.'
              print *, ' '
          end if
 c
@@ -442,20 +445,21 @@ c     matrix vector multiplication subroutine
 c
       subroutine mv (n, v, w)
       integer           n, j
-      Complex 
-     &                  v(n), w(n), one, four, h
-      parameter         (one = (1.0E+0, 0.0E+0),
-     &                   four = (4.0E+0, 0.0E+0))
+      Complex  
+     &                  v(n), w(n), one, four, six, h
+      parameter         (one = (1.0E+0, 0.0E+0) ,
+     &                   four = (4.0E+0, 0.0E+0) ,
+     &                   six = (6.0E+0, 0.0E+0) )
 c
 c     Compute the matrix vector multiplication y<---M*x
 c     where M is a n by n symmetric tridiagonal matrix with 4 on the 
 c     diagonal, 1 on the subdiagonal and superdiagonal.
 c 
-      w(1) =  four*v(1) + one*v(2)
+      w(1) =  ( four*v(1) + one*v(2) ) / six
       do 40 j = 2,n-1
-         w(j) = one*v(j-1) + four*v(j) + one*v(j+1) 
+         w(j) = ( one*v(j-1) + four*v(j) + one*v(j+1) ) / six
  40   continue 
-      w(n) =  one*v(n-1) + four*v(n) 
+      w(n) =  ( one*v(n-1) + four*v(n) ) / six
 c
       h = one / cmplx(n+1)
       call cscal(n, h, w, 1)
@@ -464,10 +468,10 @@ c
 c------------------------------------------------------------------
       subroutine av (n, v, w)
       integer           n, j
-      Complex 
+      Complex  
      &                  v(n), w(n), one, two, dd, dl, du, s, h, rho 
-      parameter         (one = (1.0E+0, 0.0E+0), 
-     &                   two = (2.0E+0, 0.0E+0))
+      parameter         (one = (1.0E+0, 0.0E+0) , 
+     &                   two = (2.0E+0, 0.0E+0) )
       common            /convct/ rho
 c
       h = one / cmplx(n+1)

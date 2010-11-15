@@ -42,7 +42,7 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: ndrv2.F   SID: 2.2   DATE OF SID: 4/22/96   RELEASE: 2
+c FILE: ndrv2.F   SID: 2.6   DATE OF SID: 10/18/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -69,14 +69,14 @@ c     %--------------%
 c
       integer           iparam(11), ipntr(14), ipiv(maxn)
       logical           select(maxncv)
-      Complex
+      Complex 
      &                  ax(maxn), d(maxncv), resid(maxn),
      &                  v(ldv, maxncv), workd(3*maxn),
      &                  workev(2*maxncv),
      &                  workl(3*maxncv*maxncv+5*maxncv),
      &                  dd(maxn), dl(maxn), du(maxn),
      &                  du2(maxn)
-      Real
+      Real 
      &                  rwork(maxn), rd(maxncv,3)
 c
 c     %---------------%
@@ -86,11 +86,11 @@ c
       character         bmat*1, which*2
       integer           ido, n, nev, ncv, lworkl, info, j, ierr,
      &                  nconv, maxitr, ishfts, mode
-      Complex 
+      Complex  
      &                  h, h2, s, sigma, s1, s2, s3, rho
       common            /convct/ rho
 c
-      Real
+      Real 
      &                  tol
       logical           rvec
 c
@@ -98,19 +98,20 @@ c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Complex 
+      Complex  
      &                   one, zero, two        
-      parameter         (one = (1.0E+0, 0.0E+0), 
-     &                   zero = (0.0E+0, 0.0E+0),
-     &                   two = (2.0E+0, 0.0E+0))
+      parameter         (one = (1.0E+0, 0.0E+0) , 
+     &                   zero = (0.0E+0, 0.0E+0) ,
+     &                   two = (2.0E+0, 0.0E+0) )
 c
 c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Real
+      Real 
      &                  scnrm2, slapy2
-      external          cgttrf, cgttrs, caxpy, ccopy, scnrm2, slapy2
+      external          cgttrf, cgttrs, caxpy, ccopy, scnrm2,
+     &                  slapy2
 c
 c     %-----------------------%
 c     | Executable statements |
@@ -154,12 +155,12 @@ c     | Construct C = A - SIGMA*I, factor C in complex     |
 c     | arithmetic (using LAPACK subroutine cgttrf). The   |
 c     | matrix A is chosen to be the tridiagonal matrix    |
 c     | derived from standard central difference of the    |
-c     | 1-d convection diffusion operator - u" + rho*u' on |
+c     | 1-d convection diffusion operator - u``+ rho*u` on |
 c     | the interval [0, 1] with zero Dirichlet boundary   |
 c     | condition.                                         |
 c     %----------------------------------------------------%
 c
-      rho = (1.0E+1, 0.0E+0)
+      rho = (1.0E+1, 0.0E+0) 
       h = one / cmplx(n+1)
       h2 = h*h
       s = rho / two
@@ -341,7 +342,7 @@ c              %---------------------------%
 c
                call av(n, v(1,j), ax)
                call caxpy(n, -d(j), v(1,j), 1, ax, 1)
-               rd(j,1) = real(d(j))
+               rd(j,1) = real (d(j))
                rd(j,2) = aimag(d(j))
                rd(j,3) = scnrm2(n, ax, 1)
                rd(j,3) = rd(j,3) / slapy2(rd(j,1),rd(j,2))
@@ -366,8 +367,8 @@ c
              print *, ' '
          else if ( info .eq. 3) then
              print *, ' ' 
-             print *, ' No shifts could be applied during implicit
-     &                  Arnoldi update, try increasing NCV.'
+             print *, ' No shifts could be applied during implicit',
+     &                ' Arnoldi update, try increasing NCV.'
              print *, ' '
          end if      
 c
@@ -404,10 +405,11 @@ c     matrix vector multiplication subroutine
 c
       subroutine av (n, v, w)
       integer           n, j
-      Complex 
+      Complex  
      &                   v(n), w(n), rho, two, one, dd, dl, du, s, h,
      &                   h2
-      parameter         (one = (1.0E+0, 0.0E+0), two = (2.0E+0, 0.0E+0))
+      parameter         (one = (1.0E+0, 0.0E+0) ,
+     &                   two = (2.0E+0, 0.0E+0) )
       common            /convct/ rho
 c
       h = one / cmplx(n+1)

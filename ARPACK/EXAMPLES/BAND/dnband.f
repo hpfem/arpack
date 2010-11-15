@@ -381,7 +381,7 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: nband.F   SID: 2.2   DATE OF SID: 11/21/95   RELEASE: 2
+c FILE: nband.F   SID: 2.3   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\EndLib
 c
@@ -436,7 +436,7 @@ c     %------------%
 c
       Double precision
      &                  one, zero
-      parameter        (one = 1.0, zero = 0.0)
+      parameter        (one = 1.0D+0, zero = 0.0D+0)
 c
 c
 c     %-----------------------------%
@@ -1077,8 +1077,8 @@ c
                print *, ' '
             else if ( info .eq. 3) then
                print *, ' '
-               print *, ' No shifts could be applied during implicit
-     &                    Arnoldi update, try increasing NCV.'
+               print *, ' No shifts could be applied during implicit',
+     &                  ' Arnoldi update, try increasing NCV.'
                print *, ' '
             end if
 c

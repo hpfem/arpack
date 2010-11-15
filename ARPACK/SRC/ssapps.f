@@ -111,10 +111,10 @@ c     Rice University
 c     Houston, Texas            
 c
 c\Revision history:
-c     12/16/93: Version ' 2.1'
+c     12/16/93: Version ' 2.4'
 c
 c\SCCS Information: @(#) 
-c FILE: sapps.F   SID: 2.5   DATE OF SID: 4/19/96   RELEASE: 2
+c FILE: sapps.F   SID: 2.6   DATE OF SID: 3/28/97   RELEASE: 2
 c
 c\Remarks
 c  1. In this version, each shift is applied to all the subblocks of
@@ -372,7 +372,7 @@ c               %----------------------------------------------------%
 c               | Accumulate the rotation in the matrix Q;  Q <- Q*G |
 c               %----------------------------------------------------%
 c
-                do 50 j = 1, min( j+jj, kplusp )
+                do 50 j = 1, min( i+jj, kplusp )
                    a1       =   c*q(j,i) + s*q(j,i+1)
                    q(j,i+1) = - s*q(j,i) + c*q(j,i+1)
                    q(j,i)   = a1

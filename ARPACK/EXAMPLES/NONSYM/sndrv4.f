@@ -46,7 +46,7 @@ c     Rice University
 c     Houston, Texas    
 c
 c\SCCS Information: @(#) 
-c FILE: ndrv4.F   SID: 2.4   DATE OF SID: 4/22/96   RELEASE: 2
+c FILE: ndrv4.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -72,7 +72,7 @@ c     | Local Arrays |
 c     %--------------%
 c
       integer           iparam(11), ipntr(14), ipiv(maxn)
-      logical           select(maxnev)
+      logical           select(maxncv)
       Real
      &                  ax(maxn), mx(maxn), d(maxncv,3), resid(maxn),
      &                  v(ldv,maxncv), workd(3*maxn), workev(3*maxncv),
@@ -111,10 +111,10 @@ c     | Parameters |
 c     %------------%
 c
       Real
-     &                   one, zero, two, rho
+     &                   one, zero, two, six, rho
       common            /convct/ rho
       parameter         (one = 1.0E+0, zero = 0.0E+0, 
-     &                   two = 2.0E+0)
+     &                   two = 2.0E+0, six = 6.0E+0)
 c
 c     %-----------------------%
 c     | Executable statements |
@@ -170,9 +170,9 @@ c
       h = one / real(n+1)
       s = rho / two
 c
-      s1 = -one/h - s - sigmar*h
-      s2 = two/h - 4.0E+0*sigmar*h
-      s3 = -one/h + s - sigmar*h
+      s1 = -one/h - s - sigmar*h/six
+      s2 = two/h - 4.0E+0*sigmar*h/six
+      s3 = -one/h + s - sigmar*h/six
 c
       do 10 j = 1, n-1
          dl(j) = s1 
@@ -456,8 +456,8 @@ c
              print *, ' '
          else if ( info .eq. 3) then
              print *, ' ' 
-             print *, ' No shifts could be applied during implicit
-     &                  Arnoldi update, try increasing NCV.'
+             print *, ' No shifts could be applied during implicit',
+     &                ' Arnoldi update, try increasing NCV.'
              print *, ' '
          end if      
 c
@@ -495,18 +495,18 @@ c
       subroutine mv (n, v, w)
       integer           n, j
       Real
-     &                  v(n), w(n), one, four, h 
-      parameter         (one = 1.0E+0, four = 4.0E+0)
+     &                  v(n), w(n), one, four, six, h 
+      parameter         (one = 1.0E+0, four = 4.0E+0, six = 6.0E+0)
 c
 c     Compute the matrix vector multiplication y<---M*x
 c     where M is mass matrix formed by using piecewise linear elements 
 c     on [0,1].
 c 
-      w(1) =  four*v(1) + one*v(2)
+      w(1) =  ( four*v(1) + one*v(2) ) / six
       do 10 j = 2,n-1
-         w(j) = one*v(j-1) + four*v(j) + one*v(j+1) 
+         w(j) = ( one*v(j-1) + four*v(j) + one*v(j+1) ) / six
  10   continue 
-      w(n) =  one*v(n-1) + four*v(n) 
+      w(n) =  ( one*v(n-1) + four*v(n) ) / six
 c
       h = one / real(n+1)
       call sscal(n, h, w, 1)

@@ -1,6 +1,6 @@
 c \BeginDoc
 c
-c \Name: znband
+c \Name: znband 
 c
 c \Description:
 c  This subroutine returns the converged approximations to eigenvalues 
@@ -25,7 +25,7 @@ c  referred to as such in the comments that follow.  The computed orthonormal
 c  basis for the invariant subspace corresponding to these Ritz values is 
 c  referred to as a Schur basis. 
 c
-c  znband can be called with one of the following modes:
+c  znband  can be called with one of the following modes:
 c
 c  Mode 1:  A*z = lambda*z.
 c           ===> OP = A  and  B = I.
@@ -40,9 +40,9 @@ c
 c  Choice of different modes can be specified in IPARAM(7) defined below.
 c
 c \Usage
-c   call znband
+c   call znband 
 c      ( RVEC, HOWMNY, SELECT, D , Z, LDZ, SIGMA, WORKEV, N, AB, 
-c        MB, LDA, FAC, KL, LU, WHICH, BMAT, NEV, TOL, RESID, NCV, 
+c        MB, LDA, FAC, KL, KU, WHICH, BMAT, NEV, TOL, RESID, NCV, 
 c        V, LDV, IPARAM, WORKD, WORKL, LWORKL, RWORK, IWORK, INFO )
 c
 c \Arguments
@@ -71,11 +71,11 @@ c          Ritz value D(j), SELECT(j) must be set to .TRUE..
 c          If HOWMNY = 'A' or 'P', SELECT need not be initialized
 c          but it is used as internal workspace.
 c
-c  D       Complex*16 array of dimension NEV+1.  (OUTPUT)
+c  D       Complex*16  array of dimension NEV+1.  (OUTPUT)
 c          On exit, D contains the  Ritz  approximations
 c          to the eigenvalues lambda for A*z = lambda*B*z.
 c
-c  Z       Complex*16 N by NEV array     (OUTPUT)
+c  Z       Complex*16  N by NEV array     (OUTPUT)
 c          On exit, if RVEC = .TRUE. and HOWMNY = 'A', then the columns of 
 c          Z represents approximate eigenvectors (Ritz vectors) corresponding 
 c          to the NCONV=IPARAM(5) Ritz values for eigensystem
@@ -92,23 +92,23 @@ c          The leading dimension of the array Z.  If Ritz vectors are
 c          desired, then  LDZ .ge.  max( 1, N ) is required.
 c          In any case,  LDZ .ge. 1 is required.
 c
-c  SIGMA   Complex*16  (INPUT)
+c  SIGMA   Complex*16   (INPUT)
 c          If IPARAM(7) = 3 then SIGMA represents the shift.
 c          Not referenced if IPARAM(7) = 1 or 2.
 c
-c  WORKEV  Complex*16 work array of dimension NCV.  (WORKSPACE)
+c  WORKEV  Complex*16  work array of dimension NCV.  (WORKSPACE)
 c 
 c  N       Integer.  (INPUT)
 c          Dimension of the eigenproblem.
 c
-c  AB      Complex*16 array of dimension LDA by N. (INPUT)
+c  AB      Complex*16  array of dimension LDA by N. (INPUT)
 c          The matrix A in band storage, in rows KL+1 to
 c          2*KL+KU+1; rows 1 to KL of the array need not be set.
 c          The j-th column of A is stored in the j-th column of the
 c          array AB as follows:
 c          AB(kl+ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(m,j+kl)
 c
-c  MB      Complex*16 array of dimension LDA by N. (INPUT)
+c  MB      Complex*16  array of dimension LDA by N. (INPUT)
 c          The matrix M in band storage, in rows KL+1 to
 c          2*KL+KU+1; rows 1 to KL of the array need not be set. 
 c          The j-th column of M is stored in the j-th column of the
@@ -119,7 +119,7 @@ c
 c  LDA     Integer. (INPUT)
 c          Leading dimension of AB, MB, FAC.
 c
-c  FAC     Complex*16 array of LDA by N. (WORKSPACE/OUTPUT)
+c  FAC     Complex*16  array of LDA by N. (WORKSPACE/OUTPUT)
 c          FAC is used to store the LU factors of MB when mode 2
 c          is invoked.  It is used to store the LU factors of
 c          (A-sigma*M) when mode 3 is invoked.
@@ -153,14 +153,14 @@ c          BMAT = 'G' -> generalized eigenvalue problem A*x = lambda*M*x
 c  NEV     Integer. (INPUT)
 c          Number of eigenvalues of to be computed.
 c   
-c  TOL     Double precision scalar.  (INPUT)
+c  TOL     Double precision  scalar.  (INPUT)
 c          Stopping criteria: the relative accuracy of the Ritz value
 c          is considered acceptable if BOUNDS(I) .LE. TOL*ABS(RITZ(I))
 c          where ABS(RITZ(I)) is the magnitude when RITZ(I) is complex.
-c          DEFAULT = dlamch('EPS')  (machine precision as computed
-c                    by the LAPACK auxilliary subroutine dlamch).
+c          DEFAULT = dlamch ('EPS')  (machine precision as computed
+c                    by the LAPACK auxilliary subroutine dlamch ).
 c
-c  RESID   Complex*16 array of length N.  (INPUT/OUTPUT)
+c  RESID   Complex*16  array of length N.  (INPUT/OUTPUT)
 c          On INPUT:
 c          If INFO .EQ. 0, a random initial residual vector is used.
 c          If INFO .NE. 0, RESID contains the initial residual vector,
@@ -178,7 +178,7 @@ c          approximately NCV-NEV Arnoldi vectors at each subsequent update
 c          iteration. Most of the cost in generating each Arnoldi vector is 
 c          in the matrix-vector operation OP*x. 
 c
-c  V       Complex*16 array N by NCV.  (OUTPUT)
+c  V       Complex*16  array N by NCV.  (OUTPUT)
 c          Upon OUTPUT: If RVEC = .TRUE. the first NCONV=IPARAM(5) columns
 c                       contain approximate Schur vectors that span the
 c                       desired invariant subspace.
@@ -190,7 +190,7 @@ c          of the eigensystem A*z = lambda*B*z.
 c
 c  LDV     Integer.  (INPUT)
 c          Leading dimension of V exactly as declared in the calling
-c          program. 
+c          program.  LDV must be great than or equal to N.
 c
 c  IPARAM  Integer array of length 11.  (INPUT/OUTPUT)
 c          IPARAM(1) = ISHIFT: 
@@ -223,18 +223,18 @@ c          Not referenced. Implicit restarting is ALWAYS used.
 c
 c          IPARAM(7) = MODE
 c          On INPUT determines what type of eigenproblem is being solved.
-c          Must be 1,2 or 3; See under \Description of znband for the 
+c          Must be 1,2 or 3; See under \Description of znband  for the 
 c          three modes available.
 c
-c WORKD    Complex*16 work array of length at least 3*n. (WORKSPACE)
+c WORKD    Complex*16  work array of length at least 3*n. (WORKSPACE)
 c
-c WORKL    Complex*16 work array of length LWORKL. (WORKSPACE) 
+c WORKL    Complex*16  work array of length LWORKL. (WORKSPACE) 
 c
 c LWORKL   Integer.  (INPUT)
 c          LWORKL must be at least 3*NCV**2 + 5*NCV.
 c
-c RWORK    Double precision array of length N (WORKSPACE)
-c          Workspace used in znaupd.
+c RWORK    Double precision  array of length N (WORKSPACE)
+c          Workspace used in znaupd .
 c
 c IWORK    Integer array of dimension at least N. (WORKSPACE)
 c          Used to mode 2,3. Store the pivot information in the 
@@ -255,7 +255,7 @@ c          = -10: IPARAM(7) must be 1,2,3.
 c          = -11: IPARAM(7) = 1 and BMAT = 'G' are incompatible.
 c          = -12: HOWMNY = 'S' not yet implemented
 c          = -13: HOWMNY must be one of 'A' or 'P' if RVEC = .true.
-c          = -14: ZNAUPD did not find any eigenvalues to sufficient
+c          = -14: ZNAUPD  did not find any eigenvalues to sufficient
 c                 accuracy.
 c
 c \EndDoc
@@ -265,15 +265,15 @@ c
 c\BeginLib
 c
 c\Routines called
-c     znaupd  ARPACK reverse communication interface routine.
-c     zneupd  ARPACK routine that returns Ritz values and (optionally)
+c     znaupd   ARPACK reverse communication interface routine.
+c     zneupd   ARPACK routine that returns Ritz values and (optionally)
 c             Ritz vectors.
-c     zgbtrf  LAPACK band matrix factorization routine.
-c     zgbtrs  LAPACK band linear system solve routine.
-c     zlacpy  LAPACK matrix copy routine.
-c     zcopy   Level 1 BLAS that copies one vector to another.
-c     dznrm2  Level 1 BLAS that computes the norm of a vector.
-c     zgbmv   Level 2 BLAS that computes the band matrix vector product.
+c     zgbtrf   LAPACK band matrix factorization routine.
+c     zgbtrs   LAPACK band linear system solve routine.
+c     zlacpy   LAPACK matrix copy routine.
+c     zcopy    Level 1 BLAS that copies one vector to another.
+c     dznrm2   Level 1 BLAS that computes the norm of a vector.
+c     zgbmv    Level 2 BLAS that computes the band matrix vector product.
 c
 c\References:
 c  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in
@@ -293,13 +293,13 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: nband.F   SID: 2.1   DATE OF SID: 11/21/95   RELEASE: 2
+c FILE: nband.F   SID: 2.3   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\EndLib
 c
 c-----------------------------------------------------------------------
 c
-      subroutine znband(rvec, howmny, select, d , z, ldz, sigma,
+      subroutine znband (rvec, howmny, select, d , z, ldz, sigma,
      &                 workev, n, ab, mb, lda, fac, kl, ku, which, 
      &                 bmat, nev, tol, resid, ncv, v, ldv, iparam, 
      &                 workd, workl, lworkl, rwork, iwork, info )
@@ -312,9 +312,9 @@ c
       Logical          rvec
       Integer          n, lda, kl, ku, nev, ncv, ldv,
      &                 ldz, lworkl, info  
-      Complex*16         
+      Complex*16          
      &                 sigma 
-      Double precision
+      Double precision 
      &                 tol
 c
 c     %-----------------%
@@ -323,11 +323,11 @@ c     %-----------------%
 c
       Integer          iparam(*), iwork(*)
       Logical          select(*)
-      Complex*16         
+      Complex*16          
      &                 d(*), resid(*), v(ldv,*), z(ldz,*),
      &                 ab(lda,*), mb(lda,*), fac(lda,*), 
      &                 workd(*), workl(*), workev(*)
-      Double precision
+      Double precision 
      &                 rwork(*)
 c
 c     %--------------%
@@ -346,18 +346,18 @@ c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Complex*16         
+      Complex*16          
      &                  one, zero
-      parameter        (one = (1.0, 0.0), zero = (0.0, 0.0))
-c
+      parameter        (one  = (1.0D+0, 0.0D+0) ,
+     &                  zero = (0.0D+0, 0.0D+0) )
 c
 c     %-----------------------------%
 c     | LAPACK & BLAS routines used |
 c     %-----------------------------%
 c
-      Double precision
-     &                 dznrm2
-      external         zcopy, zgbmv, zgbtrf, zgbtrs, dznrm2, zlacpy
+      Double precision 
+     &                 dznrm2 
+      external         zcopy , zgbmv , zgbtrf , zgbtrs , dznrm2 , zlacpy 
 c
 c     %-----------------------%
 c     | Executable Statements |
@@ -393,12 +393,12 @@ c
       if ( mode .eq. 2 ) then
 c
 c         %-----------------------------------------------%
-c         | Copy M to fac and Call LAPACK routine zgbtrf  |
+c         | Copy M to fac and Call LAPACK routine zgbtrf   |
 c         | to factor M.                                  |
 c         %-----------------------------------------------%
 c
-          call zlacpy ('A', ibot, n, mb, lda, fac, lda )
-          call zgbtrf(n, n, kl, ku, fac, lda, iwork, ierr) 
+          call zlacpy  ('A', ibot, n, mb, lda, fac, lda )
+          call zgbtrf (n, n, kl, ku, fac, lda, iwork, ierr) 
           if (ierr .ne. 0) then
               print*, ' ' 
               print*,'_band:  error in _gbtrf'
@@ -414,7 +414,7 @@ c            %-------------------------%
 c            | Construct (A - sigma*I) |
 c            %-------------------------%
 c
-             call zlacpy ('A', ibot, n, ab, lda, fac, lda )
+             call zlacpy  ('A', ibot, n, ab, lda, fac, lda )
              do 10 j = 1,n
                 fac(imid,j) = ab(imid,j) - sigma
   10         continue
@@ -437,7 +437,7 @@ c         %------------------------%
 c         | Factor (A - sigma*M)   |
 c         %------------------------%
 c
-          call zgbtrf(n, n, kl, ku, fac, lda, iwork, ierr)
+          call zgbtrf (n, n, kl, ku, fac, lda, iwork, ierr)
           if ( ierr .ne. 0 )  then
               print*, ' '
               print*, '_band: error in _gbtrf.'
@@ -453,7 +453,7 @@ c     %--------------------------------------------%
 c
   40  continue 
 c
-      call znaupd ( ido, bmat, n, which, nev, tol, resid, ncv,
+      call znaupd  ( ido, bmat, n, which, nev, tol, resid, ncv,
      &              v, ldv, iparam, ipntr, workd, workl, lworkl,
      &              rwork,info )
 
@@ -466,7 +466,7 @@ c           %----------------------------%
 c           | Perform  y <--- OP*x = A*x |
 c           %----------------------------%
 c
-            call zgbmv('Notranspose', n, n, kl, ku, one, ab(itop,1), 
+            call zgbmv ('Notranspose', n, n, kl, ku, one, ab(itop,1), 
      &                 lda, workd(ipntr(1)), 1, zero, 
      &                 workd(ipntr(2)), 1)
 c
@@ -476,11 +476,11 @@ c           %-----------------------------------%
 c           | Perform  y <--- OP*x = inv[M]*A*x |
 c           %-----------------------------------%
 c
-            call zgbmv('Notranspose', n, n, kl, ku, one, ab(itop,1), 
+            call zgbmv ('Notranspose', n, n, kl, ku, one, ab(itop,1), 
      &                  lda, workd(ipntr(1)), 1, zero, 
      &                  workd(ipntr(2)), 1)
 c
-            call zgbtrs ('Notranspose', n, kl, ku, 1, fac, lda, 
+            call zgbtrs  ('Notranspose', n, kl, ku, 1, fac, lda, 
      &                    iwork, workd(ipntr(2)), n, ierr)
             if (ierr .ne. 0) then
                print*, ' '
@@ -498,11 +498,11 @@ c           | to force the starting vector into the   |
 c           | range of OP.                            |
 c           %-----------------------------------------%
 c
-            call zgbmv('Notranspose', n, n, kl, ku, one, mb(itop,1), 
+            call zgbmv ('Notranspose', n, n, kl, ku, one, mb(itop,1), 
      &                 lda, workd(ipntr(1)), 1, zero, 
      &                 workd(ipntr(2)), 1)
 c
-            call zgbtrs ('Notranspose', n, kl, ku, 1, fac, lda, 
+            call zgbtrs  ('Notranspose', n, kl, ku, 1, fac, lda, 
      &                   iwork, workd(ipntr(2)), n, ierr)
             if (ierr .ne. 0) then
                print*, ' ' 
@@ -521,7 +521,7 @@ c           %----------------------------%
 c           | Perform  y <--- OP*x = A*x |
 c           %----------------------------%
 c
-            call zgbmv('Notranspose', n, n, kl, ku, one, ab(itop,1), 
+            call zgbmv ('Notranspose', n, n, kl, ku, one, ab(itop,1), 
      &                 lda, workd(ipntr(1)), 1, zero, 
      &                 workd(ipntr(2)), 1)
 c
@@ -531,11 +531,11 @@ c           %-----------------------------------%
 c           | Perform  y <--- OP*x = inv[M]*A*x |
 c           %-----------------------------------%
 c
-            call zgbmv('Notranspose', n, n, kl, ku, one, ab(itop,1), 
+            call zgbmv ('Notranspose', n, n, kl, ku, one, ab(itop,1), 
      &                  lda, workd(ipntr(1)), 1, zero, 
      &                  workd(ipntr(2)), 1)
 c
-            call zgbtrs ('Notranspose', n, kl, ku, 1, fac, lda, 
+            call zgbtrs  ('Notranspose', n, kl, ku, 1, fac, lda, 
      &                    iwork, workd(ipntr(2)), ldv, ierr)
             if (ierr .ne. 0) then
                print*, ' '
@@ -552,8 +552,8 @@ c              %----------------------------------%
 c              | Perform  y <-- inv(A-sigma*I)*x. |
 c              %----------------------------------%
 c
-               call zcopy(n, workd(ipntr(1)), 1, workd(ipntr(2)), 1)
-               call zgbtrs ('Notranspose', n, kl, ku, 1, fac, lda,
+               call zcopy (n, workd(ipntr(1)), 1, workd(ipntr(2)), 1)
+               call zgbtrs  ('Notranspose', n, kl, ku, 1, fac, lda,
      &                    iwork, workd(ipntr(2)), n, ierr)
                if (ierr .ne. 0) then
                   print*, ' '
@@ -570,8 +570,8 @@ c              | (M*x) has been computed and stored   |
 c              | in workd(ipntr(3)).                  |           
 c              %--------------------------------------%
 c
-               call zcopy(n, workd(ipntr(3)), 1, workd(ipntr(2)), 1)
-               call zgbtrs ('Notranspose', n, kl, ku, 1, fac, lda, 
+               call zcopy (n, workd(ipntr(3)), 1, workd(ipntr(2)), 1)
+               call zgbtrs  ('Notranspose', n, kl, ku, 1, fac, lda, 
      &                      iwork, workd(ipntr(2)), n, ierr)
                if (ierr .ne. 0) then 
                   print*, ' '
@@ -590,7 +590,7 @@ c        %--------------------%
 c        | Perform y <-- M*x  |
 c        %--------------------%
 c
-          call zgbmv('Notranspose', n, n, kl, ku, one, mb(itop,1), 
+          call zgbmv ('Notranspose', n, n, kl, ku, one, mb(itop,1), 
      &                lda, workd(ipntr(1)), 1, zero, 
      &                workd(ipntr(2)), 1)
 c
@@ -615,7 +615,7 @@ c
 c
          else 
 c
-            call zneupd (rvec, howmny , select, d, z, ldz, sigma,
+            call zneupd  (rvec, howmny , select, d, z, ldz, sigma,
      &                   workev, bmat, n, which, nev, tol,
      &                   resid, ncv, v, ldv, iparam, ipntr, workd,
      &                   workl, lworkl, rwork, info)
@@ -623,7 +623,7 @@ c
             if ( info .ne. 0) then
 c 
 c              %------------------------------------%
-c              | Check the documentation of zneupd. |
+c              | Check the documentation of zneupd . |
 c              %------------------------------------%
 c
                print *, ' ' 
@@ -640,7 +640,7 @@ c
       end if
 c
 c     %----------------------------------------%
-c     | L O O P  B A C K to call znaupd again. |
+c     | L O O P  B A C K to call znaupd  again. |
 c     %----------------------------------------%
 c
       go to 40 

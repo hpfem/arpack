@@ -69,7 +69,7 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: ssimp.F   SID: 2.5   DATE OF SID: 9/5/96   RELEASE: 2
+c FILE: ssimp.F   SID: 2.6   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -432,8 +432,8 @@ c
              print *, ' '
           else if ( info .eq. 3) then
              print *, ' ' 
-             print *, ' No shifts could be applied during implicit
-     &                 Arnoldi update, try increasing NCV.'
+             print *, ' No shifts could be applied during implicit',
+     &                ' Arnoldi update, try increasing NCV.'
              print *, ' '
           end if      
 c

@@ -31,8 +31,8 @@ c     Applied Mathematics
 c     Rice University
 c     Houston, Texas
 c
-c\SCCS Information: %Z%
-c FILE: %M%   SID: %I%   DATE OF SID: %G%   RELEASE: %R%
+c\SCCS Information: @(#)
+c FILE: sbdr2.F   SID: 2.6   DATE OF SID: 07/21/02   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -150,7 +150,7 @@ c     | Setting INFO=0 indicates that a random vector is    |
 c     | generated in DSAUPD to start the Arnoldi iteration. |
 c     %-----------------------------------------------------%
 c
-      lworkl  = 3*ncv**2+6*ncv
+      lworkl  = ncv*ncv+8*ncv
       tol  = zero 
       ido  = 0
       info = 0
@@ -174,6 +174,14 @@ c     | Construct the matrix A in LAPACK-style |
 c     | banded form.                           |
 c     %----------------------------------------%
 c
+c     %---------------------------------------------%
+c     | Zero out the workspace for banded matrices. |
+c     %---------------------------------------------%
+c
+      call dlaset('A', lda, n, zero, zero, a, lda)
+      call dlaset('A', lda, n, zero, zero, m, lda)
+      call dlaset('A', lda, n, zero, zero, rfac, lda)
+c
 c     %-------------------------------------%
 c     | KU, KL are number of superdiagonals |
 c     | and subdiagonals within the band of |
@@ -182,9 +190,6 @@ c     %-------------------------------------%
 c
       kl   = nx 
       ku   = nx 
-      call dlaset('A', 2*kl+ku+1, n, zero, zero, a, lda)
-      call dlaset('A', 2*kl+ku+1, n, zero, zero, m, lda)
-      call dlaset('A', 2*kl+ku+1, n, zero, zero, rfac, lda)
 c
 c     %---------------% 
 c     | Main diagonal |

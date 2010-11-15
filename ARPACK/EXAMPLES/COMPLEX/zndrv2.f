@@ -1,4 +1,4 @@
-      program zndrv2
+      program zndrv2 
 c
 c     Simple program to illustrate the idea of reverse communication
 c     in shift-invert mode for a standard complex nonsymmetric eigenvalue 
@@ -16,20 +16,20 @@ c     ... The shift sigma is a complex number.
 c
 c     ... OP = inv[A-sigma*I] and  B = I.
 c
-c     ... Use mode 3 of ZNAUPD.
+c     ... Use mode 3 of ZNAUPD .
 c
 c\BeginLib
 c
 c\Routines called:
-c     znaupd  ARPACK reverse communication interface routine.
-c     zneupd  ARPACK routine that returns Ritz values and (optionally)
+c     znaupd   ARPACK reverse communication interface routine.
+c     zneupd   ARPACK routine that returns Ritz values and (optionally)
 c             Ritz vectors.
-c     zgttrf  LAPACK tridiagonal factorization routine.
-c     zgttrs  LAPACK tridiagonal solve routine.
-c     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
-c     zaxpy   Level 1 BLAS that computes y <- alpha*x+y.
-c     zcopy   Level 1 BLAS that copies one vector to another.
-c     dznrm2  Level 1 BLAS that computes the norm of a vector.
+c     zgttrf   LAPACK tridiagonal factorization routine.
+c     zgttrs   LAPACK tridiagonal solve routine.
+c     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully.
+c     zaxpy    Level 1 BLAS that computes y <- alpha*x+y.
+c     zcopy    Level 1 BLAS that copies one vector to another.
+c     dznrm2   Level 1 BLAS that computes the norm of a vector.
 c     av      Matrix vector multiplication routine that computes A*x.
 c
 c\Author
@@ -42,7 +42,7 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: ndrv2.F   SID: 2.2   DATE OF SID: 4/22/96   RELEASE: 2
+c FILE: ndrv2.F   SID: 2.6   DATE OF SID: 10/18/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -69,14 +69,14 @@ c     %--------------%
 c
       integer           iparam(11), ipntr(14), ipiv(maxn)
       logical           select(maxncv)
-      Complex*16
+      Complex*16 
      &                  ax(maxn), d(maxncv), resid(maxn),
      &                  v(ldv, maxncv), workd(3*maxn),
      &                  workev(2*maxncv),
      &                  workl(3*maxncv*maxncv+5*maxncv),
      &                  dd(maxn), dl(maxn), du(maxn),
      &                  du2(maxn)
-      Double precision
+      Double precision 
      &                  rwork(maxn), rd(maxncv,3)
 c
 c     %---------------%
@@ -86,11 +86,11 @@ c
       character         bmat*1, which*2
       integer           ido, n, nev, ncv, lworkl, info, j, ierr,
      &                  nconv, maxitr, ishfts, mode
-      Complex*16 
+      Complex*16  
      &                  h, h2, s, sigma, s1, s2, s3, rho
       common            /convct/ rho
 c
-      Double precision
+      Double precision 
      &                  tol
       logical           rvec
 c
@@ -98,19 +98,20 @@ c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Complex*16 
+      Complex*16  
      &                   one, zero, two        
-      parameter         (one = (1.0D+0, 0.0D+0), 
-     &                   zero = (0.0D+0, 0.0D+0),
-     &                   two = (2.0D+0, 0.0D+0))
+      parameter         (one = (1.0D+0, 0.0D+0) , 
+     &                   zero = (0.0D+0, 0.0D+0) ,
+     &                   two = (2.0D+0, 0.0D+0) )
 c
 c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Double precision
-     &                  dznrm2, dlapy2
-      external          zgttrf, zgttrs, zaxpy, zcopy, dznrm2, dlapy2
+      Double precision 
+     &                  dznrm2 , dlapy2 
+      external          zgttrf , zgttrs , zaxpy , zcopy , dznrm2 ,
+     &                  dlapy2 
 c
 c     %-----------------------%
 c     | Executable statements |
@@ -151,16 +152,16 @@ c
 c
 c     %----------------------------------------------------%
 c     | Construct C = A - SIGMA*I, factor C in complex     |
-c     | arithmetic (using LAPACK subroutine zgttrf). The   |
+c     | arithmetic (using LAPACK subroutine zgttrf ). The   |
 c     | matrix A is chosen to be the tridiagonal matrix    |
 c     | derived from standard central difference of the    |
-c     | 1-d convection diffusion operator - u" + rho*u' on |
+c     | 1-d convection diffusion operator - u``+ rho*u` on |
 c     | the interval [0, 1] with zero Dirichlet boundary   |
 c     | condition.                                         |
 c     %----------------------------------------------------%
 c
-      rho = (1.0D+1, 0.0D+0)
-      h = one / dcmplx(n+1)
+      rho = (1.0D+1, 0.0D+0) 
+      h = one / dcmplx (n+1)
       h2 = h*h
       s = rho / two
 c
@@ -175,7 +176,7 @@ c
   10  continue 
       dd(n) = s2 
 c 
-      call zgttrf(n, dl, dd, du, du2, ipiv, ierr)
+      call zgttrf (n, dl, dd, du, du2, ipiv, ierr)
       if ( ierr .ne. 0 ) then
          print*, ' '
          print*, ' ERROR with _gttrf in _NDRV2.'
@@ -184,14 +185,14 @@ c
       end if
 c
 c     %-----------------------------------------------------%
-c     | The work array WORKL is used in ZNAUPD as           |
+c     | The work array WORKL is used in ZNAUPD  as           |
 c     | workspace.  Its dimension LWORKL is set as          |
 c     | illustrated below.  The parameter TOL determines    |
 c     | the stopping criterion. If TOL<=0, machine          |
 c     | precision is used.  The variable IDO is used for    |
 c     | reverse communication, and is initially set to 0.   |
 c     | Setting INFO=0 indicates that a random vector is    |
-c     | generated in ZNAUPD to start the Arnoldi iteration. |
+c     | generated in ZNAUPD  to start the Arnoldi iteration. |
 c     %-----------------------------------------------------%
 c
       lworkl = 3*ncv**2+5*ncv 
@@ -203,10 +204,10 @@ c     %---------------------------------------------------%
 c     | This program uses exact shifts with respect to    |
 c     | the current Hessenberg matrix (IPARAM(1) = 1).    |
 c     | IPARAM(3) specifies the maximum number of Arnoldi |
-c     | iterations allowed. Mode 3 of ZNAUPD is used      |
+c     | iterations allowed. Mode 3 of ZNAUPD  is used      |
 c     | (IPARAM(7) = 3).  All these options can be        |
 c     | changed by the user. For details see the          |
-c     | documentation in ZNAUPD.                          |
+c     | documentation in ZNAUPD .                          |
 c     %---------------------------------------------------%
 c
       ishfts = 1
@@ -224,13 +225,13 @@ c
  20   continue
 c
 c        %---------------------------------------------%
-c        | Repeatedly call the routine ZNAUPD and take | 
+c        | Repeatedly call the routine ZNAUPD  and take | 
 c        | actions indicated by parameter IDO until    |
 c        | either convergence is indicated or maxitr   |
 c        | has been exceeded.                          |
 c        %---------------------------------------------%
 c
-         call znaupd ( ido, bmat, n, which, nev, tol, resid, ncv,
+         call znaupd  ( ido, bmat, n, which, nev, tol, resid, ncv,
      &        v, ldv, iparam, ipntr, workd, workl, lworkl,
      &        rwork,info )
 c
@@ -244,9 +245,9 @@ c           | workd(ipntr(1)) as the input, and returns |
 c           | the result to workd(ipntr(2)).            |
 c           %-------------------------------------------%
 c
-            call zcopy( n, workd(ipntr(1)),1, workd(ipntr(2)), 1)
+            call zcopy ( n, workd(ipntr(1)),1, workd(ipntr(2)), 1)
 c
-            call zgttrs('N', n, 1, dl, dd, du, du2, ipiv, 
+            call zgttrs ('N', n, 1, dl, dd, du, du2, ipiv, 
      &                  workd(ipntr(2)), n, ierr) 
             if ( ierr .ne. 0 ) then
                print*, ' '
@@ -256,7 +257,7 @@ c
             end if
 c
 c           %-----------------------------------------%
-c           | L O O P   B A C K to call ZNAUPD again. |
+c           | L O O P   B A C K to call ZNAUPD  again. |
 c           %-----------------------------------------%
 c
             go to 20
@@ -272,7 +273,7 @@ c
 c
 c        %--------------------------%
 c        | Error message, check the |
-c        | documentation in ZNAUPD  |
+c        | documentation in ZNAUPD   |
 c        %--------------------------%
 c
          print *, ' '
@@ -284,7 +285,7 @@ c
 c
 c        %-------------------------------------------%
 c        | No fatal errors occurred.                 |
-c        | Post-Process using ZNEUPD.                |
+c        | Post-Process using ZNEUPD .                |
 c        |                                           |
 c        | Computed eigenvalues may be extracted.    |  
 c        |                                           |
@@ -294,7 +295,7 @@ c        %-------------------------------------------%
 c 
          rvec = .true.
 c
-         call zneupd (rvec, 'A', select, d, v, ldv, sigma, 
+         call zneupd  (rvec, 'A', select, d, v, ldv, sigma, 
      &                workev, bmat, n, which, nev, tol,
      &                resid, ncv, v, ldv, iparam, ipntr, workd,
      &                workl, lworkl, rwork, ierr)
@@ -314,7 +315,7 @@ c
 c 
 c           %------------------------------------%
 c           | Error condition:                   | 
-c           | Check the documentation of ZNEUPD. |
+c           | Check the documentation of ZNEUPD . |
 c           %------------------------------------%
 c 
             print *, ' '
@@ -340,18 +341,18 @@ c              | tolerance)                |
 c              %---------------------------%
 c
                call av(n, v(1,j), ax)
-               call zaxpy(n, -d(j), v(1,j), 1, ax, 1)
-               rd(j,1) = dble(d(j))
-               rd(j,2) = dimag(d(j))
-               rd(j,3) = dznrm2(n, ax, 1)
-               rd(j,3) = rd(j,3) / dlapy2(rd(j,1),rd(j,2))
+               call zaxpy (n, -d(j), v(1,j), 1, ax, 1)
+               rd(j,1) = dble (d(j))
+               rd(j,2) = dimag (d(j))
+               rd(j,3) = dznrm2 (n, ax, 1)
+               rd(j,3) = rd(j,3) / dlapy2 (rd(j,1),rd(j,2))
  60         continue
 c
 c           %-----------------------------%
 c           | Display computed residuals. |
 c           %-----------------------------%
 c
-            call dmout(6, nconv, 3, rd, maxncv, -6,
+            call dmout (6, nconv, 3, rd, maxncv, -6,
      &           'Ritz values (Real, Imag) and relative residuals')
 c
          end if
@@ -366,8 +367,8 @@ c
              print *, ' '
          else if ( info .eq. 3) then
              print *, ' ' 
-             print *, ' No shifts could be applied during implicit
-     &                  Arnoldi update, try increasing NCV.'
+             print *, ' No shifts could be applied during implicit',
+     &                ' Arnoldi update, try increasing NCV.'
              print *, ' '
          end if      
 c
@@ -391,7 +392,7 @@ c
       end if
 c
 c     %---------------------------%
-c     | Done with program zndrv2. |
+c     | Done with program zndrv2 . |
 c     %---------------------------%
 c
  9000 continue
@@ -404,13 +405,14 @@ c     matrix vector multiplication subroutine
 c
       subroutine av (n, v, w)
       integer           n, j
-      Complex*16 
+      Complex*16  
      &                   v(n), w(n), rho, two, one, dd, dl, du, s, h,
      &                   h2
-      parameter         (one = (1.0D+0, 0.0D+0), two = (2.0D+0, 0.0D+0))
+      parameter         (one = (1.0D+0, 0.0D+0) ,
+     &                   two = (2.0D+0, 0.0D+0) )
       common            /convct/ rho
 c
-      h = one / dcmplx(n+1)
+      h = one / dcmplx (n+1)
       h2 = h*h
       s = rho / two
       dd = two / h2

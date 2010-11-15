@@ -106,7 +106,7 @@ c     Rice University
 c     Houston, Texas            
 c
 c\SCCS Information: @(#)
-c FILE: getv0.F   SID: 2.3   DATE OF SID: 8/27/96   RELEASE: 2
+c FILE: getv0.F   SID: 2.3   DATE OF SID: 08/27/96   RELEASE: 2
 c
 c\EndLib
 c

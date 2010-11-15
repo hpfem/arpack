@@ -32,8 +32,8 @@ c     Applied Mathematics
 c     Rice University
 c     Houston, Texas
 c
-c\SCCS Information: %Z%
-c FILE: %M%   SID: %I%   DATE OF SID: %G%   RELEASE: %R%
+c\SCCS Information: @(#)
+c FILE: nbdr3.F   SID: 2.5   DATE OF SID: 08/26/96   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -64,12 +64,12 @@ c     %--------------%
 c
       integer          iparam(11), iwork(maxn)
       logical          select(maxncv)
-      Real
+      Real 
      &                 a(lda,maxn), m(lda,maxn), rfac(lda,maxn),
      &                 workl(3*maxncv*maxncv+6*maxncv), workd(3*maxn), 
      &                 workev(3*maxncv), v(ldv, maxncv),
      &                 resid(maxn), d(maxncv, 3), ax(maxn), mx(maxn)
-      Complex 
+      Complex  
      &                 cfac(lda, maxn), workc(maxn)
 c
 c     %---------------%
@@ -81,23 +81,23 @@ c
      &                 n, idiag, isup, isub, mode, maxitr,
      &                 nconv
       logical          rvec, first
-      Real 
+      Real  
      &                 tol, rho, h, sigmar, sigmai
 c 
 c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Real 
+      Real  
      &                 one, zero, two
-      parameter        (one = 1.0E+0, zero = 0.0E+0, 
-     &                  two = 2.0E+0)
+      parameter        (one = 1.0E+0 , zero = 0.0E+0 , 
+     &                  two = 2.0E+0 )
 c
 c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Real
+      Real 
      &                  slapy2, snrm2
       external          slapy2, snrm2, sgbmv, saxpy 
 c
@@ -177,6 +177,14 @@ c     | Construct matrices A and M in LAPACK-style |
 c     | banded form.                               |
 c     %--------------------------------------------%
 c
+c     %---------------------------------------------%
+c     | Zero out the workspace for banded matrices. |
+c     %---------------------------------------------%
+c
+      call slaset('A', lda, n, zero, zero, a, lda)
+      call slaset('A', lda, n, zero, zero, m, lda)
+      call slaset('A', lda, n, zero, zero, rfac, lda)
+c
 c     %-------------------------------------%
 c     | KU, KL are number of superdiagonals |
 c     | and subdiagonals within the band of |
@@ -185,20 +193,17 @@ c     %-------------------------------------%
 c
       kl   = 1 
       ku   = 1 
-      call slaset('A', 2*kl+ku+1, n, zero, zero, a, lda)
-      call slaset('A', 2*kl+ku+1, n, zero, zero, m, lda)
-      call slaset('A', 2*kl+ku+1, n, zero, zero, rfac, lda)
 c
 c     %---------------% 
 c     | Main diagonal |
 c     %---------------%
 c
-      h = one / real(n+1)
+      h = one / real (n+1)
 c
       idiag = kl+ku+1
       do 30 j = 1, n
-         a(idiag,j) = 2.0E+0 / h
-         m(idiag,j) = 4.0E+0 * h
+         a(idiag,j) = 2.0E+0  / h
+         m(idiag,j) = 4.0E+0  * h
   30  continue 
 c 
 c     %-------------------------------------%
@@ -207,7 +212,7 @@ c     %-------------------------------------%
 c 
       isup = kl+ku
       isub = kl+ku+2
-      rho = 1.0E+1
+      rho = 1.0E+1 
       do 50 j = 1, n
          a(isup,j+1) = -one/h + rho/two
          a(isub,j) = -one/h - rho/two

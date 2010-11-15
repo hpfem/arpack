@@ -42,7 +42,7 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: ndrv3.F   SID: 2.2   DATE OF SID: 4/22/96   RELEASE: 2
+c FILE: ndrv3.F   SID: 2.4   DATE OF SID: 10/18/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -69,13 +69,13 @@ c     %--------------%
 c
       integer           iparam(11), ipntr(14), ipiv(maxn)
       logical           select(maxncv)
-      Complex
+      Complex 
      &                  ax(maxn), mx(maxn), d(maxncv), resid(maxn),
      &                  v(ldv,maxncv), workd(3*maxn), 
      &                  workev(2*maxncv),
      &                  workl(3*maxncv*maxncv+5*maxncv),
      &                  dd(maxn), dl(maxn), du(maxn), du2(maxn)
-      Real            
+      Real             
      &                  rwork(maxn), rd(maxncv,3)
 c
 c     %---------------%
@@ -85,9 +85,9 @@ c
       character         bmat*1, which*2
       integer           ido, n, nev, ncv, lworkl, info, ierr, j,
      &                  nconv, maxitr, ishfts, mode
-      Complex           
+      Complex            
      &                  sigma, h
-      Real
+      Real 
      &                  tol
       logical           rvec
 c
@@ -95,18 +95,19 @@ c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Complex  
+      Complex   
      &                  zero, one
-      parameter         (zero = (0.0E+0, 0.0E+0),
-     &                   one = (1.0E+0, 0.0E+0))
+      parameter         (zero = (0.0E+0, 0.0E+0) ,
+     &                   one = (1.0E+0, 0.0E+0) )
 c
 c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Real 
+      Real  
      &                  scnrm2, slapy2
-      external          caxpy, ccopy, scnrm2, cgttrf, cgttrs, slapy2
+      external          caxpy, ccopy, scnrm2, cgttrf, cgttrs,
+     &                  slapy2
 c
 c     %-----------------------%
 c     | Executable Statements |
@@ -152,10 +153,10 @@ c
       h = one / cmplx(n+1)
       do 20 j = 1, n-1
          dl(j) = one*h
-         dd(j) = (4.0E+0, 0.0E+0)*h
+         dd(j) = (4.0E+0, 0.0E+0) *h
          du(j) = one*h 
   20  continue 
-      dd(n) = (4.0E+0, 0.0E+0)*h 
+      dd(n) = (4.0E+0, 0.0E+0) *h 
 c
       call cgttrf(n, dl, dd, du, du2, ipiv, ierr) 
       if ( ierr .ne. 0 ) then
@@ -344,7 +345,7 @@ c
                call av(n, v(1,j), ax)
                call mv(n, v(1,j), mx)
                call caxpy(n, -d(j), mx, 1, ax, 1)
-               rd(j,1) = real(d(j))
+               rd(j,1) = real (d(j))
                rd(j,2) = aimag(d(j))
                rd(j,3) = scnrm2(n, ax, 1)
                rd(j,3) = rd(j,3) / slapy2(rd(j,1),rd(j,2))
@@ -369,8 +370,8 @@ c
             print *, ' '
          else if ( info .eq. 3) then
             print *, ' ' 
-            print *, ' No shifts could be applied during implicit
-     &                 Arnoldi update, try increasing NCV.'
+            print *, ' No shifts could be applied during implicit',
+     &               ' Arnoldi update, try increasing NCV.'
             print *, ' '
          end if      
 c
@@ -403,10 +404,11 @@ c     matrix vector multiplication subroutine
 c
       subroutine av (n, v, w)
       integer           n, j
-      Complex            
+      Complex             
      &                  v(n), w(n), one, two, dd, dl, du, s, h, rho 
-      parameter         (one = (1.0E+0, 0.0E+0), two = (2.0E+0, 0.0E+0),
-     &                   rho = (1.0E+1, 0.0E+0))
+      parameter         (one = (1.0E+0, 0.0E+0) ,
+     &                   two = (2.0E+0, 0.0E+0) ,
+     &                   rho = (1.0E+1, 0.0E+0) )
 c
 c     Compute the matrix vector multiplication y<---A*x
 c     where A is the stiffness matrix formed by using piecewise linear 
@@ -428,10 +430,10 @@ c
 c------------------------------------------------------------------------
       subroutine mv (n, v, w)
       integer           n, j
-      Complex 
+      Complex  
      &                  v(n), w(n), one, four, h
-      parameter         (one = (1.0E+0, 0.0E+0), 
-     &                   four = (4.0E+0, 0.0E+0))
+      parameter         (one = (1.0E+0, 0.0E+0) , 
+     &                   four = (4.0E+0, 0.0E+0) )
 c
 c     Compute the matrix vector multiplication y<---M*x
 c     where M is the mass matrix formed by using piecewise linear elements 

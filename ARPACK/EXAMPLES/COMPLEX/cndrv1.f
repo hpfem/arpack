@@ -43,7 +43,7 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: ndrv1.F   SID: 2.2   DATE OF SID: 4/22/96   RELEASE: 2
+c FILE: ndrv1.F   SID: 2.4   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -69,12 +69,12 @@ c     %--------------%
 c
       integer           iparam(11), ipntr(14)
       logical           select(maxncv)
-      Complex
+      Complex 
      &                  ax(maxn), d(maxncv), 
      &                  v(ldv,maxncv), workd(3*maxn), 
      &                  workev(3*maxncv), resid(maxn), 
      &                  workl(3*maxncv*maxncv+5*maxncv)
-      Real 
+      Real  
      &                  rwork(maxncv), rd(maxncv,3)
 c
 c     %---------------%
@@ -84,9 +84,9 @@ c
       character         bmat*1, which*2
       integer           ido, n, nx, nev, ncv, lworkl, info, j,
      &                  ierr, nconv, maxitr, ishfts, mode
-      Complex
+      Complex 
      &                  sigma
-      Real
+      Real 
      &                  tol
       logical           rvec
 c
@@ -94,7 +94,7 @@ c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Real
+      Real 
      &                  scnrm2, slapy2
       external          scnrm2, caxpy, slapy2 
 c
@@ -289,7 +289,7 @@ c               %---------------------------%
 c
                 call av(nx, v(1,j), ax)
                 call caxpy(n, -d(j), v(1,j), 1, ax, 1)
-                rd(j,1) = real(d(j))
+                rd(j,1) = real (d(j))
                 rd(j,2) = aimag(d(j))
                 rd(j,3) = scnrm2(n, ax, 1)
                 rd(j,3) = rd(j,3) / slapy2(rd(j,1),rd(j,2))
@@ -313,8 +313,8 @@ c
              print *, ' '
          else if ( info .eq. 3) then
              print *, ' ' 
-             print *, ' No shifts could be applied during implicit
-     &                  Arnoldi update, try increasing NCV.'
+             print *, ' No shifts could be applied during implicit',
+     &                ' Arnoldi update, try increasing NCV.'
              print *, ' '
          end if      
 c
@@ -354,9 +354,9 @@ c     discretized using centered difference.
 c
       subroutine av (nx, v, w)
       integer           nx, j, lo
-      Complex         
+      Complex          
      &                  v(nx*nx), w(nx*nx), one, h2
-      parameter         (one = (1.0E+0, 0.0E+0))
+      parameter         (one = (1.0E+0, 0.0E+0) )
       external          caxpy, tv
 c
 c     Computes w <--- OP*v, where OP is the nx*nx by nx*nx block 
@@ -397,12 +397,13 @@ c=========================================================================
       subroutine tv (nx, x, y)
 c
       integer           nx, j 
-      Complex
+      Complex 
      &                  x(nx), y(nx), h, h2, dd, dl, du
 c
-      Complex
+      Complex 
      &                  one, rho
-      parameter         (one = (1.0E+0, 0.0E+0), rho = (1.0E+2, 0.0E+0))
+      parameter         (one = (1.0E+0, 0.0E+0) ,
+     &                   rho = (1.0E+2, 0.0E+0) )
 c
 c     Compute the matrix vector multiplication y<---T*x
 c     where T is a nx by nx tridiagonal matrix with DD on the 
@@ -410,9 +411,9 @@ c     diagonal, DL on the subdiagonal, and DU on the superdiagonal
 c     
       h   = one / cmplx(nx+1)
       h2  = h*h
-      dd  = (4.0E+0, 0.0E+0) / h2
-      dl  = -one/h2 - (5.0E-1, 0.0E+0)*rho/h
-      du  = -one/h2 + (5.0E-1, 0.0E+0)*rho/h
+      dd  = (4.0E+0, 0.0E+0)  / h2
+      dl  = -one/h2 - (5.0E-1, 0.0E+0) *rho/h
+      du  = -one/h2 + (5.0E-1, 0.0E+0) *rho/h
 c 
       y(1) =  dd*x(1) + du*x(2)
       do 10 j = 2,nx-1

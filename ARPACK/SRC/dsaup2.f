@@ -170,7 +170,7 @@ c     12/15/93: Version ' 2.4'
 c     xx/xx/95: Version ' 2.4'.  (R.B. Lehoucq)
 c
 c\SCCS Information: @(#) 
-c FILE: saup2.F   SID: 2.6   DATE OF SID: 8/16/96   RELEASE: 2
+c FILE: saup2.F   SID: 2.7   DATE OF SID: 5/19/98   RELEASE: 2
 c
 c\EndLib
 c
@@ -546,13 +546,13 @@ c              %-----------------------------------------------------%
 c
                wprime = 'SA'
                call dsortr (wprime, .true., kplusp, ritz, bounds)
-               nevd2 = nev / 2
-               nevm2 = nev - nevd2 
+               nevd2 = nev0 / 2
+               nevm2 = nev0 - nevd2 
                if ( nev .gt. 1 ) then
                   call dswap ( min(nevd2,np), ritz(nevm2+1), 1,
      &                 ritz( max(kplusp-nevd2+1,kplusp-np+1) ), 1)
                   call dswap ( min(nevd2,np), bounds(nevm2+1), 1,
-     &                 bounds( max(kplusp-nevd2+1,kplusp-np)+1 ), 1)
+     &                 bounds( max(kplusp-nevd2+1,kplusp-np+1)), 1)
                end if
 c
             else

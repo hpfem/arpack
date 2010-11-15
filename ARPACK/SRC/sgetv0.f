@@ -110,7 +110,7 @@ c     Rice University
 c     Houston, Texas            
 c
 c\SCCS Information: @(#) 
-c FILE: getv0.F   SID: 2.6   DATE OF SID: 8/27/96   RELEASE: 2
+c FILE: getv0.F   SID: 2.7   DATE OF SID: 04/07/99   RELEASE: 2
 c
 c\EndLib
 c
@@ -373,7 +373,7 @@ c
       if (rnorm .gt. 0.717*rnorm0) go to 50
 c 
       iter = iter + 1
-      if (iter .le. 1) then
+      if (iter .le. 5) then
 c
 c        %-----------------------------------%
 c        | Perform iterative refinement step |
@@ -400,7 +400,7 @@ c
          call svout (logfil, 1, rnorm, ndigit,
      &        '_getv0: B-norm of initial / restarted starting vector')
       end if
-      if (msglvl .gt. 2) then
+      if (msglvl .gt. 3) then
          call svout (logfil, n, resid, ndigit,
      &        '_getv0: initial / restarted starting vector')
       end if

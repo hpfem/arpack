@@ -1,9 +1,9 @@
-      program dsdrv3 
+      program dsdrv3  
 c
 c     Program to illustrate the idea of reverse communication in
 c     inverse mode for a generalized symmetric eigenvalue problem.
-c     The following program uses the two LAPACK subroutines dgttrf.f 
-c     and dgttrs.f to factor and solve a tridiagonal system of equations.
+c     The following program uses the two LAPACK subroutines dgttrf .f 
+c     and dgttrs .f to factor and solve a tridiagonal system of equations.
 c
 c     We implement example three of ex-sym.doc in DOCUMENTS directory
 c
@@ -17,20 +17,20 @@ c         using piecewise linear elements.
 c
 c     ... OP = inv[M]*A  and  B = M.
 c
-c     ... Use mode 2 of DSAUPD.    
+c     ... Use mode 2 of DSAUPD .    
 c
 c\BeginLib
 c
 c\Routines called:
-c     dsaupd  ARPACK reverse communication interface routine.
-c     dseupd  ARPACK routine that returns Ritz values and (optionally)
+c     dsaupd   ARPACK reverse communication interface routine.
+c     dseupd   ARPACK routine that returns Ritz values and (optionally)
 c             Ritz vectors.
-c     dgttrf  LAPACK tridiagonal factorization routine.
-c     dgttrs  LAPACK tridiagonal solve routine.
-c     daxpy   Level 1 BLAS that computes y <- alpha*x+y.
-c     dscal   Level 1 BLAS that scales a vector by a scalar.
-c     dcopy   Level 1 BLAS that copies one vector to another.
-c     dnrm2   Level 1 BLAS that computes the norm of a vector.     
+c     dgttrf   LAPACK tridiagonal factorization routine.
+c     dgttrs   LAPACK tridiagonal solve routine.
+c     daxpy    Level 1 BLAS that computes y <- alpha*x+y.
+c     dscal    Level 1 BLAS that scales a vector by a scalar.
+c     dcopy    Level 1 BLAS that copies one vector to another.
+c     dnrm2    Level 1 BLAS that computes the norm of a vector.     
 c     av      Matrix vector multiplication routine that computes A*x.
 c     mv      Matrix vector multiplication routine that computes M*x.
 c
@@ -44,7 +44,7 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: sdrv3.F   SID: 2.4   DATE OF SID: 4/22/96   RELEASE: 2
+c FILE: sdrv3.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -69,7 +69,7 @@ c     %--------------%
 c     | Local Arrays |
 c     %--------------%
 c
-      Double precision
+      Double precision 
      &                 v(ldv,maxncv), workl(maxncv*(maxncv+8)),
      &                 workd(3*maxn), d(maxncv,2), resid(maxn), 
      &                 ad(maxn), adl(maxn), adu(maxn), adu2(maxn),
@@ -85,25 +85,25 @@ c
       integer          ido, n, nev, ncv, lworkl, info, j, ierr,
      &                 nconv, maxitr, ishfts, mode
       logical          rvec
-      Double precision
+      Double precision 
      &                 sigma, r1, r2, tol, h
 c
 c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Double precision 
+      Double precision  
      &                 zero, one, four, six
-      parameter        ( zero = 0.0D+0, one = 1.0D+0, 
-     &                   four = 4.0D+0, six = 6.0D+0 )
+      parameter        ( zero = 0.0D+0 , one = 1.0D+0 , 
+     &                   four = 4.0D+0 , six = 6.0D+0  )
 c
 c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Double precision
-     &                 dnrm2
-      external         daxpy, dcopy, dscal, dnrm2, dgttrf, dgttrs
+      Double precision 
+     &                 dnrm2 
+      external         daxpy , dcopy , dscal , dnrm2 , dgttrf , dgttrs 
 c
 c     %--------------------%
 c     | Intrinsic function |
@@ -145,14 +145,14 @@ c
       which = 'LM'
 c
 c     %--------------------------------------------------%
-c     | The work array WORKL is used in DSAUPD as        |
+c     | The work array WORKL is used in DSAUPD  as        |
 c     | workspace.  Its dimension LWORKL is set as       |
 c     | illustrated below.  The parameter TOL determines |
 c     | the stopping criterion.  If TOL<=0, machine      |
 c     | precision is used.  The variable IDO is used for |
 c     | reverse communication and is initially set to 0. |
 c     | Setting INFO=0 indicates that a random vector is |
-c     | generated in DSAUPD to start the Arnoldi         |
+c     | generated in DSAUPD  to start the Arnoldi         |
 c     | iteration.                                       |
 c     %--------------------------------------------------%
 c
@@ -165,10 +165,10 @@ c     %---------------------------------------------------%
 c     | This program uses exact shifts with respect to    |
 c     | the current Hessenberg matrix (IPARAM(1) = 1).    |
 c     | IPARAM(3) specifies the maximum number of Arnoldi |
-c     | iterations allowed.  Mode 2 of DSAUPD is used     |
+c     | iterations allowed.  Mode 2 of DSAUPD  is used     |
 c     | (IPARAM(7) = 2).  All these options may be        |
 c     | changed by the user. For details, see the         |
-c     | documentation in DSAUPD.                          |
+c     | documentation in DSAUPD .                          |
 c     %---------------------------------------------------%
 c
       ishfts = 1
@@ -186,7 +186,7 @@ c     | arising from using piecewise linear finite     |
 c     | elements on the interval [0, 1].               |
 c     %------------------------------------------------%
 c
-      h = one / dble(n+1)
+      h = one / dble (n+1)
 c
       r1 = (four / six) * h 
       r2 = (one / six) * h
@@ -194,8 +194,8 @@ c
          ad(j) =  r1
          adl(j) = r2
  20   continue 
-      call dcopy (n, adl, 1, adu, 1)
-      call dgttrf (n, adl, ad, adu, adu2, ipiv, ierr)
+      call dcopy  (n, adl, 1, adu, 1)
+      call dgttrf  (n, adl, ad, adu, adu2, ipiv, ierr)
       if (ierr .ne. 0) then 
          print *, ' '
          print *, ' Error with _gttrf in _SDRV3. '
@@ -210,13 +210,13 @@ c
  10   continue
 c
 c        %---------------------------------------------%
-c        | Repeatedly call the routine DSAUPD and take | 
+c        | Repeatedly call the routine DSAUPD  and take | 
 c        | actions indicated by parameter IDO until    |
 c        | either convergence is indicated or maxitr   |
 c        | has been exceeded.                          |
 c        %---------------------------------------------%
 c
-         call dsaupd ( ido, bmat, n, which, nev, tol, resid, 
+         call dsaupd  ( ido, bmat, n, which, nev, tol, resid, 
      &                 ncv, v, ldv, iparam, ipntr, workd, workl,
      &                 lworkl, info )
 c
@@ -236,8 +236,8 @@ c           | overwrites workd(ipntr(1)).          |
 c           %--------------------------------------%
 c
             call av (n, workd(ipntr(1)), workd(ipntr(2)))
-            call dcopy(n, workd(ipntr(2)),  1, workd(ipntr(1)), 1)
-            call dgttrs ('Notranspose', n, 1, adl, ad, adu, adu2, ipiv, 
+            call dcopy (n, workd(ipntr(2)),  1, workd(ipntr(1)), 1)
+            call dgttrs  ('Notranspose', n, 1, adl, ad, adu, adu2, ipiv, 
      &                  workd(ipntr(2)), n, ierr)
             if (ierr .ne. 0) then 
                print *, ' '
@@ -247,7 +247,7 @@ c
             end if
 c
 c           %-----------------------------------------%
-c           | L O O P   B A C K to call DSAUPD again. |
+c           | L O O P   B A C K to call DSAUPD  again. |
 c           %-----------------------------------------%
 c
             go to 10
@@ -266,7 +266,7 @@ c
             call mv (n, workd(ipntr(1)), workd(ipntr(2)))
 c
 c           %-----------------------------------------%
-c           | L O O P   B A C K to call DSAUPD again. |
+c           | L O O P   B A C K to call DSAUPD  again. |
 c           %-----------------------------------------%
 c
             go to 10
@@ -284,7 +284,7 @@ c
 c
 c        %--------------------------%
 c        | Error message, check the |
-c        | documentation in DSAUPD  |
+c        | documentation in DSAUPD   |
 c        %--------------------------%
 c
          print *, ' '
@@ -296,7 +296,7 @@ c
 c
 c        %-------------------------------------------%
 c        | No fatal errors occurred.                 |
-c        | Post-Process using DSEUPD.                |
+c        | Post-Process using DSEUPD .                |
 c        |                                           |
 c        | Computed eigenvalues may be extracted.    |  
 c        |                                           |
@@ -306,7 +306,7 @@ c        %-------------------------------------------%
 c           
          rvec = .true.
 c
-         call dseupd ( rvec, 'All', select, d, v, ldv, sigma, 
+         call dseupd  ( rvec, 'All', select, d, v, ldv, sigma, 
      &        bmat, n, which, nev, tol, resid, ncv, v, ldv, 
      &        iparam, ipntr, workd, workl, lworkl, ierr )
 c
@@ -325,7 +325,7 @@ c
 c
 c           %------------------------------------%
 c           | Error condition:                   |
-c           | Check the documentation of DSEUPD. |
+c           | Check the documentation of DSEUPD . |
 c           %------------------------------------%
 c 
             print *, ' ' 
@@ -353,8 +353,8 @@ c              %---------------------------%
 c
                call av(n, v(1,j), ax)
                call mv(n, v(1,j), mx)
-               call daxpy(n, -d(j,1), mx, 1, ax, 1)
-               d(j,2) = dnrm2(n, ax, 1)
+               call daxpy (n, -d(j,1), mx, 1, ax, 1)
+               d(j,2) = dnrm2 (n, ax, 1)
                d(j,2) = d(j,2) / abs(d(j,1))
 c
  30         continue
@@ -363,7 +363,7 @@ c           %-----------------------------%
 c           | Display computed residuals. |
 c           %-----------------------------%
 c
-            call dmout(6, nconv, 2, d, maxncv, -6,
+            call dmout (6, nconv, 2, d, maxncv, -6,
      &           'Ritz values and relative residuals')
          end if
 c
@@ -377,8 +377,8 @@ c
             print *, ' '
          else if ( info .eq. 3) then
             print *, ' ' 
-            print *, ' No shifts could be applied during implicit
-     &                 Arnoldi update, try increasing NCV.'
+            print *, ' No shifts could be applied during implicit',
+     &               ' Arnoldi update, try increasing NCV.'
             print *, ' '
          end if      
 c
@@ -402,7 +402,7 @@ c
       end if
 c
 c     %---------------------------%
-c     | Done with program dsdrv3. |
+c     | Done with program dsdrv3 . |
 c     %---------------------------%
 c
  9000 continue
@@ -416,10 +416,10 @@ c     on the interval [0,1].
 c
       subroutine mv (n, v, w)
       integer           n, j
-      Double precision
+      Double precision 
      &                  v(n),w(n), one, four, six, h
-      parameter         (one = 1.0D+0, four = 4.0D+0, 
-     &                   six = 6.0D+0)
+      parameter         (one = 1.0D+0 , four = 4.0D+0 , 
+     &                   six = 6.0D+0 )
 c
       w(1) = four*v(1) + v(2)
       do 100 j = 2,n-1
@@ -430,8 +430,8 @@ c
 c
 c     Scale the vector w by h.
 c
-      h = one / (dble(n+1)*six)
-      call dscal(n, h, w, 1)
+      h = one / (dble (n+1)*six)
+      call dscal (n, h, w, 1)
       return
       end
 c
@@ -445,9 +445,9 @@ c     piecewise linear elements.
 c
       subroutine av (n, v, w)
       integer           n, j
-      Double precision
+      Double precision 
      &                  v(n),w(n), two, one, h
-      parameter         ( one = 1.0D+0, two = 2.0D+0 )
+      parameter         ( one = 1.0D+0 , two = 2.0D+0  )
 c
       w(1) =  two*v(1) - v(2)
       do 100 j = 2,n-1
@@ -458,7 +458,7 @@ c
 c
 c     Scale the vector w by (1 / h).
 c
-      h = one / dble(n+1)
-      call dscal(n, one/h, w, 1)
+      h = one / dble (n+1)
+      call dscal (n, one/h, w, 1)
       return
       end

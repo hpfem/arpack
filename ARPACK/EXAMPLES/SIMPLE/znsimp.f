@@ -1,4 +1,4 @@
-      program znsimp 
+      program znsimp  
 c
 c     This example program is intended to illustrate the 
 c     simplest case of using ARPACK in considerable detail.  
@@ -20,12 +20,12 @@ c           eigenvalues of largest magnitude.  Other options
 c           are available.
 c
 c        2) Illustration of the reverse communication interface 
-c           needed to utilize the top level ARPACK routine ZNAUPD 
+c           needed to utilize the top level ARPACK routine ZNAUPD  
 c           that computes the quantities needed to construct
 c           the desired eigenvalues and eigenvectors(if requested).
 c
 c        3) How to extract the desired eigenvalues and eigenvectors
-c           using the ARPACK routine ZNEUPD.
+c           using the ARPACK routine ZNEUPD .
 c
 c     The only thing that must be supplied in order to use this
 c     routine on your problem is to change the array dimensions 
@@ -47,17 +47,17 @@ c\Example-1
 c     ... Suppose we want to solve A*x = lambda*x in regular mode,
 c     ... OP = A  and  B = I.
 c     ... Assume "call av (nx,x,y)" computes y = A*x
-c     ... Use mode 1 of ZNAUPD.
+c     ... Use mode 1 of ZNAUPD .
 c
 c\BeginLib
 c
 c\Routines called
-c     znaupd  ARPACK reverse communication interface routine.
-c     zneupd  ARPACK routine that returns Ritz values and (optionally)
+c     znaupd   ARPACK reverse communication interface routine.
+c     zneupd   ARPACK routine that returns Ritz values and (optionally)
 c             Ritz vectors.
-c     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
-c     dznrm2  Level 1 BLAS that computes the norm of a complex vector.
-c     zaxpy   Level 1 BLAS that computes y <- alpha*x+y.
+c     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully.
+c     dznrm2   Level 1 BLAS that computes the norm of a complex vector.
+c     zaxpy    Level 1 BLAS that computes y <- alpha*x+y.
 c     av      Matrix vector multiplication routine that computes A*x.
 c     tv      Matrix vector multiplication routine that computes T*x,
 c             where T is a tridiagonal matrix.  It is used in routine
@@ -72,8 +72,8 @@ c     Applied Mathematics
 c     Rice University 
 c     Houston, Texas
 c
-c\SCCS Information: %Z%
-c FILE: %M%   SID: %I%   DATE OF SID: %G%   RELEASE: %R%
+c\SCCS Information: @(#)
+c FILE: nsimp.F   SID: 2.4   DATE OF SID: 10/20/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -112,12 +112,12 @@ c     %--------------%
 c
       integer           iparam(11), ipntr(14)
       logical           select(maxncv)
-      Complex*16
+      Complex*16 
      &                  ax(maxn), d(maxncv), 
      &                  v(ldv,maxncv), workd(3*maxn), 
      &                  workev(2*maxncv), resid(maxn), 
      &                  workl(3*maxncv*maxncv+5*maxncv)
-      Double precision 
+      Double precision  
      &                  rwork(maxncv), rd(maxncv,3)
 c
 c     %---------------%
@@ -127,9 +127,9 @@ c
       character         bmat*1, which*2
       integer           ido, n, nx, nev, ncv, lworkl, info, ierr,
      &                  j, ishfts, maxitr, mode1, nconv
-      Complex*16
+      Complex*16 
      &                  sigma
-      Double precision
+      Double precision 
      &                  tol
       logical           rvec
 c
@@ -137,9 +137,9 @@ c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Double precision
-     &                  dznrm2, dlapy2
-      external          dznrm2, zaxpy, dlapy2 
+      Double precision 
+     &                  dznrm2 , dlapy2 
+      external          dznrm2 , zaxpy , dlapy2  
 c
 c     %-----------------------%
 c     | Executable Statements |
@@ -189,7 +189,7 @@ c     |                                               |
 c     |    4) Ask for the NEV eigenvalues of          |
 c     |       largest magnitude                       |
 c     |         (indicated by which = 'LM')           |
-c     |       See documentation in ZNAUPD for the     |
+c     |       See documentation in ZNAUPD  for the     |
 c     |       other options SM, LR, SR, LI, SI.       | 
 c     |                                               |
 c     | Note: NEV and NCV must satisfy the following  |
@@ -218,7 +218,7 @@ c
 c     %-----------------------------------------------------%
 c     |                                                     |
 c     | Specification of stopping rules and initial         |
-c     | conditions before calling ZNAUPD                    |
+c     | conditions before calling ZNAUPD                     |
 c     |                                                     |
 c     | TOL  determines the stopping criterion.             |
 c     |                                                     |
@@ -231,10 +231,10 @@ c     |           (machine precision) is used.              |
 c     |                                                     |
 c     | IDO  is the REVERSE COMMUNICATION parameter         |
 c     |      used to specify actions to be taken on return  |
-c     |      from ZNAUPD. (see usage below)                 |
+c     |      from ZNAUPD . (see usage below)                 |
 c     |                                                     |
 c     |      It MUST initially be set to 0 before the first |
-c     |      call to ZNAUPD.                                | 
+c     |      call to ZNAUPD .                                | 
 c     |                                                     |
 c     | INFO on entry specifies starting vector information |
 c     |      and on return indicates error codes            |
@@ -246,7 +246,7 @@ c     |      a nonzero value on the initial call is used    |
 c     |      if you want to specify your own starting       |
 c     |      vector (This vector must be placed in RESID).  | 
 c     |                                                     |
-c     | The work array WORKL is used in ZNAUPD as           | 
+c     | The work array WORKL is used in ZNAUPD  as           | 
 c     | workspace.  Its dimension LWORKL is set as          |
 c     | illustrated below.                                  |
 c     |                                                     |
@@ -263,10 +263,10 @@ c     |                                                   |
 c     | This program uses the exact shift strategy        |
 c     | (indicated by setting IPARAM(1) = 1).             |
 c     | IPARAM(3) specifies the maximum number of Arnoldi |
-c     | iterations allowed.  Mode 1 of ZNAUPD is used     |
+c     | iterations allowed.  Mode 1 of ZNAUPD  is used     |
 c     | (IPARAM(7) = 1). All these options can be changed |
 c     | by the user. For details see the documentation in |
-c     | ZNAUPD.                                           |
+c     | ZNAUPD .                                           |
 c     %---------------------------------------------------%
 c
       ishfts = 1
@@ -286,13 +286,13 @@ c
  10   continue
 c   
 c        %---------------------------------------------%
-c        | Repeatedly call the routine ZNAUPD and take | 
+c        | Repeatedly call the routine ZNAUPD  and take | 
 c        | actions indicated by parameter IDO until    |
 c        | either convergence is indicated or maxitr   |
 c        | has been exceeded.                          |
 c        %---------------------------------------------%
 
-         call znaupd ( ido, bmat, n, which, nev, tol, resid, ncv,
+         call znaupd  ( ido, bmat, n, which, nev, tol, resid, ncv,
      &                 v, ldv, iparam, ipntr, workd, workl, lworkl,
      &                 rwork,info )
 c
@@ -314,7 +314,7 @@ c
             call av (nx, workd(ipntr(1)), workd(ipntr(2)))
 c 
 c           %-----------------------------------------%
-c           | L O O P   B A C K to call ZNAUPD again. |
+c           | L O O P   B A C K to call ZNAUPD  again. |
 c           %-----------------------------------------%
 c
             go to 10
@@ -330,7 +330,7 @@ c
 c
 c        %--------------------------%
 c        | Error message, check the |
-c        | documentation in ZNAUPD  |
+c        | documentation in ZNAUPD   |
 c        %--------------------------%
 c
          print *, ' '
@@ -342,14 +342,14 @@ c
 c
 c        %-------------------------------------------%
 c        | No fatal errors occurred.                 |
-c        | Post-Process using ZNEUPD.                |
+c        | Post-Process using ZNEUPD .                |
 c        |                                           |
 c        | Computed eigenvalues may be extracted.    |  
 c        |                                           |
 c        | Eigenvectors may be also computed now if  |
 c        | desired.  (indicated by rvec = .true.)    | 
 c        |                                           |
-c        | The routine ZNEUPD now called to do this  |
+c        | The routine ZNEUPD  now called to do this  |
 c        | post processing (Other modes may require  |
 c        | more complicated post processing than     |
 c        | mode1.)                                   |
@@ -358,7 +358,7 @@ c        %-------------------------------------------%
 c           
          rvec = .true.
 c
-         call zneupd (rvec, 'A', select, D, V, ldv, sigma,
+         call zneupd  (rvec, 'A', select, D, V, ldv, sigma,
      &        workev, bmat, n, which, nev, tol, resid, ncv,
      &        v, ldv, iparam, ipntr, workd, workl, lworkl,
      &        rwork, ierr)
@@ -378,7 +378,7 @@ c
 c
 c            %------------------------------------%
 c            | Error condition:                   |
-c            | Check the documentation of ZNEUPD. |
+c            | Check the documentation of ZNEUPD . |
 c            %------------------------------------%
 c
              print *, ' '
@@ -405,18 +405,18 @@ c                | tolerance)                |
 c                %---------------------------%
 c
                  call av(nx, v(1,j), ax)
-                 call zaxpy(n, -d(j), v(1,j), 1, ax, 1)
-                 rd(j,1) = dble(d(j))
-                 rd(j,2) = dimag(d(j))
-                 rd(j,3) = dznrm2(n, ax, 1)
-                 rd(j,3) = rd(j,3) / dlapy2(rd(j,1),rd(j,2))
+                 call zaxpy (n, -d(j), v(1,j), 1, ax, 1)
+                 rd(j,1) = dble (d(j))
+                 rd(j,2) = dimag (d(j))
+                 rd(j,3) = dznrm2 (n, ax, 1)
+                 rd(j,3) = rd(j,3) / dlapy2 (rd(j,1),rd(j,2))
  20          continue
 c
 c            %-----------------------------%
 c            | Display computed residuals. |
 c            %-----------------------------%
 c
-             call dmout(6, nconv, 3, rd, maxncv, -6,
+             call dmout (6, nconv, 3, rd, maxncv, -6,
      &            'Ritz values (Real, Imag) and relative residuals')
          end if
 c
@@ -430,8 +430,8 @@ c
              print *, ' '
          else if ( info .eq. 3) then
              print *, ' ' 
-             print *, ' No shifts could be applied during implicit
-     &                  Arnoldi update, try increasing NCV.'
+             print *, ' No shifts could be applied during implicit',
+     &                ' Arnoldi update, try increasing NCV.'
              print *, ' '
          end if      
 c
@@ -455,7 +455,7 @@ c
       end if
 c
 c     %---------------------------%
-c     | Done with program znsimp. |
+c     | Done with program znsimp . |
 c     %---------------------------%
 c
  9000 continue
@@ -471,10 +471,10 @@ c     discretized using centered difference.
 c
       subroutine av (nx, v, w)
       integer           nx, j, lo
-      Complex*16         
+      Complex*16          
      &                  v(nx*nx), w(nx*nx), one, h2
-      parameter         (one = (1.0D+0, 0.0D+0))
-      external          zaxpy
+      parameter         (one = (1.0D+0, 0.0D+0) )
+      external          zaxpy 
 c
 c     Computes w <--- OP*v, where OP is the nx*nx by nx*nx block 
 c     tridiagonal matrix
@@ -493,21 +493,21 @@ c
 c     The subroutine TV is called to computed y<---T*x.
 c
 c
-      h2 = one / dcmplx((nx+1)*(nx+1))
+      h2 = one / dcmplx ((nx+1)*(nx+1))
 c
       call tv(nx,v(1),w(1))
-      call zaxpy(nx, -one/h2, v(nx+1), 1, w(1), 1)
+      call zaxpy (nx, -one/h2, v(nx+1), 1, w(1), 1)
 c
       do 10 j = 2, nx-1
          lo = (j-1)*nx
          call tv(nx, v(lo+1), w(lo+1))
-         call zaxpy(nx, -one/h2, v(lo-nx+1), 1, w(lo+1), 1)
-         call zaxpy(nx, -one/h2, v(lo+nx+1), 1, w(lo+1), 1)
+         call zaxpy (nx, -one/h2, v(lo-nx+1), 1, w(lo+1), 1)
+         call zaxpy (nx, -one/h2, v(lo+nx+1), 1, w(lo+1), 1)
   10  continue 
 c
       lo = (nx-1)*nx
       call tv(nx, v(lo+1), w(lo+1))
-      call zaxpy(nx, -one/h2, v(lo-nx+1), 1, w(lo+1), 1)
+      call zaxpy (nx, -one/h2, v(lo-nx+1), 1, w(lo+1), 1)
 c
       return
       end
@@ -515,23 +515,23 @@ c=========================================================================
       subroutine tv (nx, x, y)
 c
       integer           nx, j 
-      Complex*16
+      Complex*16 
      &                  x(nx), y(nx), h, h2, dd, dl, du
 c
-      Complex*16
+      Complex*16 
      &                  one, rho
-      parameter         (one = (1.0D+0, 0.0D+0), 
-     &                   rho = (1.0D+2, 0.0D+0))
+      parameter         (one = (1.0D+0, 0.0D+0) , 
+     &                   rho = (1.0D+2, 0.0D+0) )
 c
 c     Compute the matrix vector multiplication y<---T*x
 c     where T is a nx by nx tridiagonal matrix with DD on the 
 c     diagonal, DL on the subdiagonal, and DU on the superdiagonal
 c     
-      h   = one / dcmplx(nx+1)
+      h   = one / dcmplx (nx+1)
       h2  = h*h
-      dd  = (4.0D+0, 0.0D+0) / h2
-      dl  = -one/h2 - (5.0D-1, 0.0D+0)*rho/h
-      du  = -one/h2 + (5.0D-1, 0.0D+0)*rho/h
+      dd  = (4.0D+0, 0.0D+0)  / h2
+      dl  = -one/h2 - (5.0D-1, 0.0D+0) *rho/h
+      du  = -one/h2 + (5.0D-1, 0.0D+0) *rho/h
 c 
       y(1) =  dd*x(1) + du*x(2)
       do 10 j = 2,nx-1

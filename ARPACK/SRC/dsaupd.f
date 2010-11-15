@@ -1,7 +1,7 @@
 c-----------------------------------------------------------------------
 c\BeginDoc
 c
-c\Name: dsaupd
+c\Name: dsaupd 
 c
 c\Description: 
 c
@@ -12,19 +12,19 @@ c  few eigenpairs of a linear operator OP that is real and symmetric
 c  with respect to a real positive semi-definite symmetric matrix B, 
 c  i.e.
 c                   
-c       B*OP = (OP')*B.  
+c       B*OP = (OP`)*B.  
 c
 c  Another way to express this condition is 
 c
-c       < x,OPy > = < OPx,y >  where < z,w > = z'Bw  .
+c       < x,OPy > = < OPx,y >  where < z,w > = z`Bw  .
 c  
 c  In the standard eigenproblem B is the identity matrix.  
-c  ( A' denotes transpose of A)
+c  ( A` denotes transpose of A)
 c
 c  The computed approximate eigenvalues are called Ritz values and
 c  the corresponding approximate eigenvectors are called Ritz vectors.
 c
-c  dsaupd is usually called iteratively to solve one of the 
+c  dsaupd  is usually called iteratively to solve one of the 
 c  following problems:
 c
 c  Mode 1:  A*x = lambda*x, A symmetric 
@@ -60,18 +60,18 @@ c        the accuracy requirements for the eigenvalue
 c        approximations.
 c
 c\Usage:
-c  call dsaupd 
+c  call dsaupd  
 c     ( IDO, BMAT, N, WHICH, NEV, TOL, RESID, NCV, V, LDV, IPARAM,
 c       IPNTR, WORKD, WORKL, LWORKL, INFO )
 c
 c\Arguments
 c  IDO     Integer.  (INPUT/OUTPUT)
 c          Reverse communication flag.  IDO must be zero on the first 
-c          call to dsaupd.  IDO will be set internally to
+c          call to dsaupd .  IDO will be set internally to
 c          indicate the type of operation to be performed.  Control is
 c          then given back to the calling routine which has the
 c          responsibility to carry out the requested operation and call
-c          dsaupd with the result.  The operand is given in
+c          dsaupd  with the result.  The operand is given in
 c          WORKD(IPNTR(1)), the result must be put in WORKD(IPNTR(2)).
 c          (If Mode = 2 see remark 5 below)
 c          -------------------------------------------------------------
@@ -120,14 +120,14 @@ c
 c  NEV     Integer.  (INPUT)
 c          Number of eigenvalues of OP to be computed. 0 < NEV < N.
 c
-c  TOL     Double precision scalar.  (INPUT)
+c  TOL     Double precision  scalar.  (INPUT)
 c          Stopping criterion: the relative accuracy of the Ritz value 
 c          is considered acceptable if BOUNDS(I) .LE. TOL*ABS(RITZ(I)).
 c          If TOL .LE. 0. is passed a default is set:
-c          DEFAULT = DLAMCH('EPS')  (machine precision as computed
-c                    by the LAPACK auxiliary subroutine DLAMCH).
+c          DEFAULT = DLAMCH ('EPS')  (machine precision as computed
+c                    by the LAPACK auxiliary subroutine DLAMCH ).
 c
-c  RESID   Double precision array of length N.  (INPUT/OUTPUT)
+c  RESID   Double precision  array of length N.  (INPUT/OUTPUT)
 c          On INPUT: 
 c          If INFO .EQ. 0, a random initial residual vector is used.
 c          If INFO .NE. 0, RESID contains the initial residual vector,
@@ -144,7 +144,7 @@ c          NCV-NEV Lanczos vectors at each subsequent update iteration.
 c          Most of the cost in generating each Lanczos vector is in the 
 c          matrix-vector product OP*x. (See remark 4 below).
 c
-c  V       Double precision N by NCV array.  (OUTPUT)
+c  V       Double precision  N by NCV array.  (OUTPUT)
 c          The NCV columns of V contain the Lanczos basis vectors.
 c
 c  LDV     Integer.  (INPUT)
@@ -187,12 +187,12 @@ c          No longer referenced. Implicit restarting is ALWAYS used.
 c
 c          IPARAM(7) = MODE
 c          On INPUT determines what type of eigenproblem is being solved.
-c          Must be 1,2,3,4,5; See under \Description of dsaupd for the 
+c          Must be 1,2,3,4,5; See under \Description of dsaupd  for the 
 c          five modes available.
 c
 c          IPARAM(8) = NP
 c          When ido = 3 and the user provides shifts through reverse
-c          communication (IPARAM(1)=0), dsaupd returns NP, the number
+c          communication (IPARAM(1)=0), dsaupd  returns NP, the number
 c          of shifts the user is to provide. 0 < NP <=NCV-NEV. See Remark
 c          6 below.
 c
@@ -217,23 +217,23 @@ c          IPNTR(7): pointer to the Ritz estimates in array WORKL associated
 c                    with the Ritz values located in RITZ in WORKL.
 c          IPNTR(11): pointer to the NP shifts in WORKL. See Remark 6 below.
 c
-c          Note: IPNTR(8:10) is only referenced by dseupd. See Remark 2.
+c          Note: IPNTR(8:10) is only referenced by dseupd . See Remark 2.
 c          IPNTR(8): pointer to the NCV RITZ values of the original system.
 c          IPNTR(9): pointer to the NCV corresponding error bounds.
 c          IPNTR(10): pointer to the NCV by NCV matrix of eigenvectors
 c                     of the tridiagonal matrix T. Only referenced by
-c                     dseupd if RVEC = .TRUE. See Remarks.
+c                     dseupd  if RVEC = .TRUE. See Remarks.
 c          -------------------------------------------------------------
 c          
-c  WORKD   Double precision work array of length 3*N.  (REVERSE COMMUNICATION)
+c  WORKD   Double precision  work array of length 3*N.  (REVERSE COMMUNICATION)
 c          Distributed array to be used in the basic Arnoldi iteration
 c          for reverse communication.  The user should not use WORKD 
 c          as temporary workspace during the iteration. Upon termination
 c          WORKD(1:N) contains B*RESID(1:N). If the Ritz vectors are desired
-c          subroutine dseupd uses this output.
+c          subroutine dseupd  uses this output.
 c          See Data Distribution Note below.  
 c
-c  WORKL   Double precision work array of length LWORKL.  (OUTPUT/WORKSPACE)
+c  WORKL   Double precision  work array of length LWORKL.  (OUTPUT/WORKSPACE)
 c          Private (replicated) array on each PE or array allocated on
 c          the front end.  See Data Distribution Note below.
 c
@@ -264,7 +264,7 @@ c          = -5: WHICH must be one of 'LM', 'SM', 'LA', 'SA' or 'BE'.
 c          = -6: BMAT must be one of 'I' or 'G'.
 c          = -7: Length of private work array WORKL is not sufficient.
 c          = -8: Error return from trid. eigenvalue calculation;
-c                Informatinal error from LAPACK routine dsteqr.
+c                Informatinal error from LAPACK routine dsteqr .
 c          = -9: Starting vector is zero.
 c          = -10: IPARAM(7) must be 1,2,3,4,5.
 c          = -11: IPARAM(7) = 1 and BMAT = 'G' are incompatable.
@@ -282,19 +282,19 @@ c     algebraic order.  The computed Ritz values are approximate
 c     eigenvalues of OP.  The selection of WHICH should be made
 c     with this in mind when Mode = 3,4,5.  After convergence, 
 c     approximate eigenvalues of the original problem may be obtained 
-c     with the ARPACK subroutine dseupd. 
+c     with the ARPACK subroutine dseupd . 
 c
 c  2. If the Ritz vectors corresponding to the converged Ritz values
-c     are needed, the user must call dseupd immediately following completion
-c     of dsaupd. This is new starting with version 2.1 of ARPACK.
+c     are needed, the user must call dseupd  immediately following completion
+c     of dsaupd . This is new starting with version 2.1 of ARPACK.
 c
-c  3. If M can be factored into a Cholesky factorization M = LL'
+c  3. If M can be factored into a Cholesky factorization M = LL`
 c     then Mode = 2 should not be selected.  Instead one should use
-c     Mode = 1 with  OP = inv(L)*A*inv(L').  Appropriate triangular 
-c     linear systems should be solved with L and L' rather
+c     Mode = 1 with  OP = inv(L)*A*inv(L`).  Appropriate triangular 
+c     linear systems should be solved with L and L` rather
 c     than computing inverses.  After convergence, an approximate
 c     eigenvector z of the original problem is recovered by solving
-c     L'z = x  where x is a Ritz vector of OP.
+c     L`z = x  where x is a Ritz vector of OP.
 c
 c  4. At present there is no a-priori analysis to guide the selection
 c     of NCV relative to NEV.  The only formal requrement is that NCV > NEV.
@@ -375,14 +375,14 @@ c  8. R.B. Lehoucq, D.C. Sorensen, "Implementation of Some Spectral
 c     Transformations in a k-Step Arnoldi Method". In Preparation.
 c
 c\Routines called:
-c     dsaup2  ARPACK routine that implements the Implicitly Restarted
+c     dsaup2   ARPACK routine that implements the Implicitly Restarted
 c             Arnoldi Iteration.
-c     dstats  ARPACK routine that initialize timing and other statistics
+c     dstats   ARPACK routine that initialize timing and other statistics
 c             variables.
 c     ivout   ARPACK utility routine that prints integers.
 c     second  ARPACK utility routine for timing.
-c     dvout   ARPACK utility routine that prints vectors.
-c     dlamch  LAPACK routine that determines machine constants.
+c     dvout    ARPACK utility routine that prints vectors.
+c     dlamch   LAPACK routine that determines machine constants.
 c
 c\Authors
 c     Danny Sorensen               Phuong Vu
@@ -393,10 +393,10 @@ c     Rice University
 c     Houston, Texas            
 c 
 c\Revision history:
-c     12/15/93: Version ' 2.4'
+c     12/15/93: Version ' 2.4' 
 c
 c\SCCS Information: @(#) 
-c FILE: saupd.F   SID: 2.7   DATE OF SID: 8/27/96   RELEASE: 2 
+c FILE: saupd.F   SID: 2.8   DATE OF SID: 04/10/01   RELEASE: 2 
 c
 c\Remarks
 c     1. None
@@ -405,7 +405,7 @@ c\EndLib
 c
 c-----------------------------------------------------------------------
 c
-      subroutine dsaupd
+      subroutine dsaupd 
      &   ( ido, bmat, n, which, nev, tol, resid, ncv, v, ldv, iparam, 
      &     ipntr, workd, workl, lworkl, info )
 c
@@ -422,7 +422,7 @@ c     %------------------%
 c
       character  bmat*1, which*2
       integer    ido, info, ldv, lworkl, n, ncv, nev
-      Double precision
+      Double precision 
      &           tol
 c
 c     %-----------------%
@@ -430,16 +430,16 @@ c     | Array Arguments |
 c     %-----------------%
 c
       integer    iparam(11), ipntr(11)
-      Double precision
+      Double precision 
      &           resid(n), v(ldv,ncv), workd(3*n), workl(lworkl)
 c
 c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Double precision
+      Double precision 
      &           one, zero
-      parameter (one = 1.0D+0, zero = 0.0D+0)
+      parameter (one = 1.0D+0 , zero = 0.0D+0 )
 c
 c     %---------------%
 c     | Local Scalars |
@@ -456,15 +456,15 @@ c     %----------------------%
 c     | External Subroutines |
 c     %----------------------%
 c
-      external   dsaup2,  dvout, ivout, second, dstats
+      external   dsaup2 ,  dvout , ivout, second, dstats 
 c
 c     %--------------------%
 c     | External Functions |
 c     %--------------------%
 c
-      Double precision
-     &           dlamch
-      external   dlamch
+      Double precision 
+     &           dlamch 
+      external   dlamch 
 c
 c     %-----------------------%
 c     | Executable Statements |
@@ -477,14 +477,15 @@ c        | Initialize timing statistics  |
 c        | & message level for debugging |
 c        %-------------------------------%
 c
-         call dstats
+         call dstats 
          call second (t0)
          msglvl = msaupd
 c
          ierr   = 0
          ishift = iparam(1)
          mxiter = iparam(3)
-         nb     = iparam(4)
+c         nb     = iparam(4)
+         nb     = 1
 c
 c        %--------------------------------------------%
 c        | Revision 2 performs only implicit restart. |
@@ -546,7 +547,7 @@ c        | Set default parameters |
 c        %------------------------%
 c
          if (nb .le. 0)                         nb = 1
-         if (tol .le. zero)                     tol = dlamch('EpsMach')
+         if (tol .le. zero)                     tol = dlamch ('EpsMach')
 c
 c        %----------------------------------------------%
 c        | NP is the number of additional steps to      |
@@ -598,7 +599,7 @@ c     %-------------------------------------------------------%
 c     | Carry out the Implicitly restarted Lanczos Iteration. |
 c     %-------------------------------------------------------%
 c
-      call dsaup2 
+      call dsaup2  
      &   ( ido, bmat, n, which, nev0, np, tol, resid, mode, iupd,
      &     ishift, mxiter, v, ldv, workl(ih), ldh, workl(ritz),
      &     workl(bounds), workl(iq), ldq, workl(iw), ipntr, workd,
@@ -620,7 +621,7 @@ c
 c
 c     %------------------------------------%
 c     | Exit if there was an informational |
-c     | error within dsaup2.               |
+c     | error within dsaup2 .               |
 c     %------------------------------------%
 c
       if (info .lt. 0) go to 9000
@@ -631,9 +632,9 @@ c
      &               '_saupd: number of update iterations taken')
          call ivout (logfil, 1, np, ndigit,
      &               '_saupd: number of "converged" Ritz values')
-         call dvout (logfil, np, workl(Ritz), ndigit, 
+         call dvout  (logfil, np, workl(Ritz), ndigit, 
      &               '_saupd: final Ritz values')
-         call dvout (logfil, np, workl(Bounds), ndigit, 
+         call dvout  (logfil, np, workl(Bounds), ndigit, 
      &               '_saupd: corresponding error bounds')
       end if 
 c
@@ -653,8 +654,8 @@ c
  1000    format (//,
      &      5x, '==========================================',/
      &      5x, '= Symmetric implicit Arnoldi update code =',/
-     &      5x, '= Version Number:', ' 2.4', 19x, ' =',/
-     &      5x, '= Version Date:  ', ' 07/31/96', 14x, ' =',/
+     &      5x, '= Version Number:', ' 2.4' , 19x, ' =',/
+     &      5x, '= Version Date:  ', ' 07/31/96' , 14x, ' =',/
      &      5x, '==========================================',/
      &      5x, '= Summary of timing statistics           =',/
      &      5x, '==========================================',//)
@@ -683,7 +684,7 @@ c
       return
 c
 c     %---------------%
-c     | End of dsaupd |
+c     | End of dsaupd  |
 c     %---------------%
 c
       end

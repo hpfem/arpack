@@ -33,8 +33,8 @@ c     Applied Mathematics
 c     Rice University
 c     Houston, Texas
 c
-c\SCCS Information: %Z%
-c FILE: %M%   SID: %I%   DATE OF SID: %G%   RELEASE: %R%
+c\SCCS Information: @(#)
+c FILE: nbdr4.F   SID: 2.6   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -90,9 +90,9 @@ c     | Parameters |
 c     %------------%
 c
       Double precision 
-     &                 one, zero, two
+     &                 one, zero, two, six
       parameter        (one = 1.0D+0, zero = 0.0D+0, 
-     &                  two = 2.0D+0)
+     &                  two = 2.0D+0, six = 6.0D+0)
 c
 c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
@@ -179,6 +179,14 @@ c     | Construct matrices A and M in LAPACK-style |
 c     | banded form.                               |
 c     %--------------------------------------------%
 c
+c     %---------------------------------------------%
+c     | Zero out the workspace for banded matrices. |
+c     %---------------------------------------------%
+c
+      call dlaset('A', lda, n, zero, zero, a, lda)
+      call dlaset('A', lda, n, zero, zero, m, lda)
+      call dlaset('A', lda, n, zero, zero, rfac, lda)
+c
 c     %-------------------------------------%
 c     | KU, KL are number of superdiagonals |
 c     | and subdiagonals within the band of |
@@ -187,9 +195,6 @@ c     %-------------------------------------%
 c
       kl   = 1
       ku   = 1 
-      call dlaset('A', 2*kl+ku+1, n, zero, zero, a, lda)
-      call dlaset('A', 2*kl+ku+1, n, zero, zero, m, lda)
-      call dlaset('A', 2*kl+ku+1, n, zero, zero, rfac, lda)
 c
 c     %---------------% 
 c     | Main diagonal |
@@ -199,7 +204,7 @@ c
       idiag = kl+ku+1
       do 30 j = 1, n
          a(idiag,j) = 2.0D+0 / h
-         m(idiag,j) = 4.0D+0 * h
+         m(idiag,j) = 4.0D+0 * h / six
   30  continue 
 c 
 c     %-------------------------------------%
@@ -212,8 +217,8 @@ c
       do 40 j = 1, n-1
          a(isup,j+1) = -one/h + rho/two
          a(isub,j) = -one/h - rho/two
-         m(isup,j+1) = one*h
-         m(isub,j) = one*h 
+         m(isup,j+1) = one*h/six
+         m(isub,j) = one*h/six 
   40    continue      
 c
 c     %------------------------------------------------%

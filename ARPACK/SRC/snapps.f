@@ -124,10 +124,10 @@ c     Rice University
 c     Houston, Texas    
 c
 c\Revision history:
-c     xx/xx/92: Version ' 2.1'
+c     xx/xx/92: Version ' 2.4'
 c
 c\SCCS Information: @(#) 
-c FILE: napps.F   SID: 2.3   DATE OF SID: 4/20/96   RELEASE: 2
+c FILE: napps.F   SID: 2.4   DATE OF SID: 3/28/97   RELEASE: 2
 c
 c\Remarks
 c  1. In this version, each shift is applied to all the sublocks of
@@ -430,7 +430,7 @@ c              %----------------------------------------------------%
 c              | Accumulate the rotation in the matrix Q;  Q <- Q*G |
 c              %----------------------------------------------------%
 c
-               do 70 j = 1, min( j+jj, kplusp ) 
+               do 70 j = 1, min( i+jj, kplusp ) 
                   t        =   c*q(j,i) + s*q(j,i+1)
                   q(j,i+1) = - s*q(j,i) + c*q(j,i+1)
                   q(j,i)   = t   

@@ -34,8 +34,8 @@ c     Applied Mathematics
 c     Rice University
 c     Houston, Texas
 c
-c\SCCS Information: %Z%
-c FILE: %M%   SID: %I%   DATE OF SID: %G%   RELEASE: %R%
+c\SCCS Information: @(#)
+c FILE: nbdr3.F   SID: 2.4   DATE OF SID: 10/20/00   RELEASE: 2
 c
 c\Remarks
 c     1. None
@@ -66,12 +66,12 @@ c     %--------------%
 c
       integer          iparam(11), iwork(maxn)
       logical          select(maxncv)
-      Complex 
+      Complex  
      &                 a(lda,maxn), m(lda,maxn), fac(lda,maxn),
      &                 workl(3*maxncv*maxncv+5*maxncv), workd(3*maxn), 
      &                 workev(2*maxncv), v(ldv, maxncv),
      &                 resid(maxn), d(maxncv), ax(maxn), mx(maxn)
-      Real 
+      Real  
      &                 rwork(maxn), rd(maxncv,3)
 c
 c     %---------------%
@@ -83,27 +83,28 @@ c
      &                 n, idiag, isup, isub, maxitr,
      &                 mode, nconv
       logical          rvec
-      Real 
+      Real  
      &                 tol
-      Complex
+      Complex 
      &                 rho, h, sigma
 c 
 c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Complex 
+      Complex  
      &                 one, zero, two
-      parameter        (one = (1.0E+0, 0.0E+0), zero = (0.0E+0, 0.0E+0),
-     &                  two = (2.0E+0, 0.0E+0))
+      parameter        (one  = (1.0E+0, 0.0E+0) ,
+     &                  zero = (0.0E+0, 0.0E+0) ,
+     &                  two  = (2.0E+0, 0.0E+0) )
 c
 c     %-----------------------------%
 c     | BLAS & LAPACK routines used |
 c     %-----------------------------%
 c
-      Real
+      Real 
      &                  scnrm2, slapy2
-      external          scnrm2, cgbmv, caxpy, slapy2 
+      external          scnrm2, cgbmv, caxpy, slapy2, claset 
 c
 c     %-----------------------%
 c     | Executable Statements |
@@ -177,6 +178,14 @@ c     | Construct matrices A and M in LAPACK-style |
 c     | banded form.                               |
 c     %--------------------------------------------%
 c
+c     %---------------------------------------------%
+c     | Zero out the workspace for banded matrices. |
+c     %---------------------------------------------%
+c
+      call claset('A', lda, n, zero, zero, a, lda)
+      call claset('A', lda, n, zero, zero, m, lda)
+      call claset('A', lda, n, zero, zero, fac, lda)
+c
 c     %-------------------------------------%
 c     | KU, KL are number of superdiagonals |
 c     | and subdiagonals within the band of |
@@ -185,9 +194,6 @@ c     %-------------------------------------%
 c
       kl   = 1
       ku   = 1
-      call claset('A', 2*kl+ku+1, n, zero, zero, a, lda)
-      call claset('A', 2*kl+ku+1, n, zero, zero, m, lda)
-      call claset('A', 2*kl+ku+1, n, zero, zero, fac, lda)
 c
 c     %---------------% 
 c     | Main diagonal |
@@ -197,8 +203,8 @@ c
 c
       idiag = kl+ku+1
       do 30 j = 1, n
-         a(idiag,j) = (2.0E+0, 0.0E+0) / h 
-         m(idiag,j) = (4.0E+0, 0.0E+0) * h 
+         a(idiag,j) = (2.0E+0, 0.0E+0)  / h 
+         m(idiag,j) = (4.0E+0, 0.0E+0)  * h 
   30  continue 
 c 
 c     %-------------------------------------%
@@ -207,7 +213,7 @@ c     %-------------------------------------%
 c 
       isup = kl+ku
       isub = kl+ku+2
-      rho = (1.0E+1, 0.0E+0)
+      rho = (1.0E+1, 0.0E+0) 
       do 40 j = 1, n-1
            a(isup,j+1) = -one/h + rho/two
            a(isub,j) = -one/h - rho/two
@@ -268,7 +274,7 @@ c
      &                 m(kl+1,1), lda, v(1,j), 1, zero,
      &                 mx, 1)
             call caxpy(n, -d(j), mx, 1, ax, 1)
-            rd(j,1) = real(d(j))
+            rd(j,1) = real (d(j))
             rd(j,2) = aimag(d(j))
             rd(j,3) = scnrm2(n, ax, 1)
             rd(j,3) = rd(j,3) / slapy2(rd(j,1), rd(j,2))         

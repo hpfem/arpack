@@ -42,7 +42,7 @@ c
 c \Usage
 c   call cnband
 c      ( RVEC, HOWMNY, SELECT, D , Z, LDZ, SIGMA, WORKEV, N, AB, 
-c        MB, LDA, FAC, KL, LU, WHICH, BMAT, NEV, TOL, RESID, NCV, 
+c        MB, LDA, FAC, KL, KU, WHICH, BMAT, NEV, TOL, RESID, NCV, 
 c        V, LDV, IPARAM, WORKD, WORKL, LWORKL, RWORK, IWORK, INFO )
 c
 c \Arguments
@@ -71,11 +71,11 @@ c          Ritz value D(j), SELECT(j) must be set to .TRUE..
 c          If HOWMNY = 'A' or 'P', SELECT need not be initialized
 c          but it is used as internal workspace.
 c
-c  D       Complex array of dimension NEV+1.  (OUTPUT)
+c  D       Complex  array of dimension NEV+1.  (OUTPUT)
 c          On exit, D contains the  Ritz  approximations
 c          to the eigenvalues lambda for A*z = lambda*B*z.
 c
-c  Z       Complex N by NEV array     (OUTPUT)
+c  Z       Complex  N by NEV array     (OUTPUT)
 c          On exit, if RVEC = .TRUE. and HOWMNY = 'A', then the columns of 
 c          Z represents approximate eigenvectors (Ritz vectors) corresponding 
 c          to the NCONV=IPARAM(5) Ritz values for eigensystem
@@ -92,23 +92,23 @@ c          The leading dimension of the array Z.  If Ritz vectors are
 c          desired, then  LDZ .ge.  max( 1, N ) is required.
 c          In any case,  LDZ .ge. 1 is required.
 c
-c  SIGMA   Complex  (INPUT)
+c  SIGMA   Complex   (INPUT)
 c          If IPARAM(7) = 3 then SIGMA represents the shift.
 c          Not referenced if IPARAM(7) = 1 or 2.
 c
-c  WORKEV  Complex work array of dimension NCV.  (WORKSPACE)
+c  WORKEV  Complex  work array of dimension NCV.  (WORKSPACE)
 c 
 c  N       Integer.  (INPUT)
 c          Dimension of the eigenproblem.
 c
-c  AB      Complex array of dimension LDA by N. (INPUT)
+c  AB      Complex  array of dimension LDA by N. (INPUT)
 c          The matrix A in band storage, in rows KL+1 to
 c          2*KL+KU+1; rows 1 to KL of the array need not be set.
 c          The j-th column of A is stored in the j-th column of the
 c          array AB as follows:
 c          AB(kl+ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(m,j+kl)
 c
-c  MB      Complex array of dimension LDA by N. (INPUT)
+c  MB      Complex  array of dimension LDA by N. (INPUT)
 c          The matrix M in band storage, in rows KL+1 to
 c          2*KL+KU+1; rows 1 to KL of the array need not be set. 
 c          The j-th column of M is stored in the j-th column of the
@@ -119,7 +119,7 @@ c
 c  LDA     Integer. (INPUT)
 c          Leading dimension of AB, MB, FAC.
 c
-c  FAC     Complex array of LDA by N. (WORKSPACE/OUTPUT)
+c  FAC     Complex  array of LDA by N. (WORKSPACE/OUTPUT)
 c          FAC is used to store the LU factors of MB when mode 2
 c          is invoked.  It is used to store the LU factors of
 c          (A-sigma*M) when mode 3 is invoked.
@@ -153,14 +153,14 @@ c          BMAT = 'G' -> generalized eigenvalue problem A*x = lambda*M*x
 c  NEV     Integer. (INPUT)
 c          Number of eigenvalues of to be computed.
 c   
-c  TOL     Real scalar.  (INPUT)
+c  TOL     Real  scalar.  (INPUT)
 c          Stopping criteria: the relative accuracy of the Ritz value
 c          is considered acceptable if BOUNDS(I) .LE. TOL*ABS(RITZ(I))
 c          where ABS(RITZ(I)) is the magnitude when RITZ(I) is complex.
 c          DEFAULT = slamch('EPS')  (machine precision as computed
 c                    by the LAPACK auxilliary subroutine slamch).
 c
-c  RESID   Complex array of length N.  (INPUT/OUTPUT)
+c  RESID   Complex  array of length N.  (INPUT/OUTPUT)
 c          On INPUT:
 c          If INFO .EQ. 0, a random initial residual vector is used.
 c          If INFO .NE. 0, RESID contains the initial residual vector,
@@ -178,7 +178,7 @@ c          approximately NCV-NEV Arnoldi vectors at each subsequent update
 c          iteration. Most of the cost in generating each Arnoldi vector is 
 c          in the matrix-vector operation OP*x. 
 c
-c  V       Complex array N by NCV.  (OUTPUT)
+c  V       Complex  array N by NCV.  (OUTPUT)
 c          Upon OUTPUT: If RVEC = .TRUE. the first NCONV=IPARAM(5) columns
 c                       contain approximate Schur vectors that span the
 c                       desired invariant subspace.
@@ -190,7 +190,7 @@ c          of the eigensystem A*z = lambda*B*z.
 c
 c  LDV     Integer.  (INPUT)
 c          Leading dimension of V exactly as declared in the calling
-c          program. 
+c          program.  LDV must be great than or equal to N.
 c
 c  IPARAM  Integer array of length 11.  (INPUT/OUTPUT)
 c          IPARAM(1) = ISHIFT: 
@@ -226,14 +226,14 @@ c          On INPUT determines what type of eigenproblem is being solved.
 c          Must be 1,2 or 3; See under \Description of cnband for the 
 c          three modes available.
 c
-c WORKD    Complex work array of length at least 3*n. (WORKSPACE)
+c WORKD    Complex  work array of length at least 3*n. (WORKSPACE)
 c
-c WORKL    Complex work array of length LWORKL. (WORKSPACE) 
+c WORKL    Complex  work array of length LWORKL. (WORKSPACE) 
 c
 c LWORKL   Integer.  (INPUT)
 c          LWORKL must be at least 3*NCV**2 + 5*NCV.
 c
-c RWORK    Real array of length N (WORKSPACE)
+c RWORK    Real  array of length N (WORKSPACE)
 c          Workspace used in cnaupd.
 c
 c IWORK    Integer array of dimension at least N. (WORKSPACE)
@@ -293,7 +293,7 @@ c     Rice University
 c     Houston, Texas
 c
 c\SCCS Information: @(#)
-c FILE: nband.F   SID: 2.1   DATE OF SID: 11/21/95   RELEASE: 2
+c FILE: nband.F   SID: 2.3   DATE OF SID: 10/17/00   RELEASE: 2
 c
 c\EndLib
 c
@@ -312,9 +312,9 @@ c
       Logical          rvec
       Integer          n, lda, kl, ku, nev, ncv, ldv,
      &                 ldz, lworkl, info  
-      Complex         
+      Complex          
      &                 sigma 
-      Real
+      Real 
      &                 tol
 c
 c     %-----------------%
@@ -323,11 +323,11 @@ c     %-----------------%
 c
       Integer          iparam(*), iwork(*)
       Logical          select(*)
-      Complex         
+      Complex          
      &                 d(*), resid(*), v(ldv,*), z(ldz,*),
      &                 ab(lda,*), mb(lda,*), fac(lda,*), 
      &                 workd(*), workl(*), workev(*)
-      Real
+      Real 
      &                 rwork(*)
 c
 c     %--------------%
@@ -346,16 +346,16 @@ c     %------------%
 c     | Parameters |
 c     %------------%
 c
-      Complex         
+      Complex          
      &                  one, zero
-      parameter        (one = (1.0, 0.0), zero = (0.0, 0.0))
-c
+      parameter        (one  = (1.0E+0, 0.0E+0) ,
+     &                  zero = (0.0E+0, 0.0E+0) )
 c
 c     %-----------------------------%
 c     | LAPACK & BLAS routines used |
 c     %-----------------------------%
 c
-      Real
+      Real 
      &                 scnrm2
       external         ccopy, cgbmv, cgbtrf, cgbtrs, scnrm2, clacpy
 c
