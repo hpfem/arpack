@@ -10,3 +10,4 @@ fi
 cd ARPACK
 export ARPACK_HOME=`pwd`
 make all
+cp libarpack.a $SPKG_LOCAL/lib/
