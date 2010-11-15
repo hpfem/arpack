@@ -59,7 +59,10 @@ arpacklib:
 	do \
 		$(CD) $$f; \
 		$(ECHO) Making lib in $$f; \
-		$(MAKE) $(PRECISIONS); \
+		for prec in $(PRECISIONS); \
+		do \
+			$(MAKE) $$prec; \
+		done; \
 		$(CD) ..; \
 	done );
 	$(RANLIB) $(ARPACKLIB)
