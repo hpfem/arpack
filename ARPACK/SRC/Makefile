@@ -49,22 +49,8 @@ ZOBJ  = znaitr.o znapps.o znaup2.o znaupd.o zneigh.o zneupd.o zngets.o \
 .f.o:
 	$(FC) $(FFLAGS) -c $<
 
-all: single double complex complex16
-
-single: $(SOBJ)
-	$(AR) $(ARFLAGS) $(ARPACKLIB) $(SOBJ)
-	$(RANLIB) $(ARPACKLIB)
-
-double: $(DOBJ)
-	$(AR) $(ARFLAGS) $(ARPACKLIB) $(DOBJ)
-	$(RANLIB) $(ARPACKLIB)
-
-complex: $(COBJ)
-	$(AR) $(ARFLAGS) $(ARPACKLIB) $(COBJ)
-	$(RANLIB) $(ARPACKLIB)
-
-complex16: $(ZOBJ)
-	$(AR) $(ARFLAGS) $(ARPACKLIB) $(ZOBJ)
+all: $(SOBJ) $(DOBJ) $(COBJ) $(ZOBJ)
+	$(AR) $(ARFLAGS) $(ARPACKLIB) $(SOBJ) $(DOBJ) $(COBJ) $(ZOBJ)
 	$(RANLIB) $(ARPACKLIB)
 #
 sdrv:

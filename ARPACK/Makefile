@@ -16,7 +16,7 @@
 
 include ARmake.inc
 
-PRECISIONS = single double complex complex16
+PRECISIONS = all
 #PRECISIONS = double ddrv
 #  If LAPACK and BLAS are not installed on you system, and you are going 
 #  to use the driver programs in the EXAMPLES directory,  you need to add 
@@ -59,10 +59,7 @@ arpacklib:
 	do \
 		$(CD) $$f; \
 		$(ECHO) Making lib in $$f; \
-		for prec in $(PRECISIONS); \
-		do \
-			$(MAKE) $$prec; \
-		done; \
+		$(MAKE) $(PRECISIONS); \
 		$(CD) ..; \
 	done );
 	$(RANLIB) $(ARPACKLIB)
