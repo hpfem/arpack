@@ -8,4 +8,5 @@ if [ "$SPKG_LOCAL" = "" ]; then
 fi
 
 cd ARPACK
+export ARPACK_HOME=`pwd`
 make all

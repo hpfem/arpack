@@ -25,7 +25,7 @@
 # | other than your home directory.      |
 # %--------------------------------------%
 #
-home = /home/ondrej/repos/arpack/ARPACK
+home = $(ARPACK_HOME)
 #
 #  %--------------------------------------%
 #  | The platform identifier to suffix to |
