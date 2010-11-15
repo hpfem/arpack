@@ -25,14 +25,14 @@
 # | other than your home directory.      |
 # %--------------------------------------%
 #
-home = $(HOME)/ARPACK
+home = /home/ondrej/repos/arpack/ARPACK
 #
 #  %--------------------------------------%
 #  | The platform identifier to suffix to |
 #  | the end of library names             |
 #  %--------------------------------------%
 #
-PLAT = SUN4
+PLAT = LINUX
 #
 #  %------------------------------------------------------%
 #  | The directories to find the various pieces of ARPACK |
@@ -57,7 +57,7 @@ DIRS        = $(BLASdir) $(LAPACKdir) $(UTILdir) $(SRCdir)
 # | The name of the libraries to be created/linked to |
 # %---------------------------------------------------%
 #
-ARPACKLIB  = $(home)/libarpack_$(PLAT).a
+ARPACKLIB  = $(home)/libarpack.a
 LAPACKLIB = 
 BLASLIB = 
 #
@@ -101,8 +101,8 @@ ALIBS =  $(ARPACKLIB) $(LAPACKLIB) $(BLASLIB)
 # | for your system.                        |
 # %-----------------------------------------%
 #
-FC      = f77
-FFLAGS	= -O -cg89
+FC      = gfortran
+FFLAGS	= -O -fno-second-underscore -fPIC
 
 LDFLAGS = 
 CD      = cd
@@ -112,7 +112,7 @@ ECHO    = echo
 LN      = ln
 LNFLAGS = -s
 
-MAKE    = /bin/make
+MAKE    = /usr/bin/make
 
 RM      = rm
 RMFLAGS = -f
